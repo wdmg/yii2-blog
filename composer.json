@@ -1,0 +1,44 @@
+{
+  "name": "wdmg/yii2-blog",
+  "description": "Publications manager",
+  "keywords": ["yii2", "yii2-blog", "blog", "wdmg"],
+  "type": "yii2-extension",
+  "license": "MIT",
+  "version": "1.0.0",
+  "homepage": "https://github.com/wdmg/yii2-blog",
+  "support": {
+    "source": "https://github.com/wdmg/yii2-blog",
+    "issues": "https://github.com/wdmg/yii2-blog/issues"
+  },
+  "authors": [
+    {
+      "name": "Alexsander Vyshnyvetskyy",
+      "email": "alex.vyshnyvetskyy@gmail.com"
+    },
+    {
+      "name": "W.D.M.Group, Ukraine",
+      "email": "wdmg.com.ua@gmail.com"
+    }
+  ],
+  "require": {
+    "yiisoft/yii2": "^2.0.20",
+    "wdmg/yii2-base": "^1.1.6",
+    "wdmg/yii2-selectinput": "^1.0.7",
+    "wdmg/yii2-tagsinput": "^1.0.2",
+    "wdmg/yii2-editor": "^1.0.7"
+  },
+  "minimum-stability": "dev",
+  "autoload": {
+    "psr-4": {
+      "wdmg\\blog\\": ""
+    }
+  },
+  "extra": {
+    "options": {
+      "routePrefix": "admin",
+      "blogRoute": "/blog",
+      "blogLayout": "@app/views/layouts/main",
+      "blogImagePath": "/uploads/blog"
+    }
+  }
+}
