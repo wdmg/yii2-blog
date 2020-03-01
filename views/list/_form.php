@@ -82,7 +82,7 @@ use wdmg\widgets\SelectInput;
         ]); ?>
         <hr/>
         <div class="form-group">
-            <?= Html::a(Yii::t('app/modules/blog', '&larr; Back to list'), ['blog/index'], ['class' => 'btn btn-default pull-left']) ?>&nbsp;
+            <?= Html::a(Yii::t('app/modules/blog', '&larr; Back to list'), ['list/index'], ['class' => 'btn btn-default pull-left']) ?>&nbsp;
             <?= Html::submitButton(Yii::t('app/modules/blog', 'Save'), ['class' => 'btn btn-success pull-right']) ?>
         </div>
         <?php ActiveForm::end(); ?>

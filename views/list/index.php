@@ -9,7 +9,7 @@ use wdmg\widgets\SelectInput;
 /* @var $this yii\web\View */
 /* @var $model wdmg\blog\models\Blog */
 
-$this->title = $this->context->module->name;
+$this->title = Yii::t('app/modules/blog', 'All posts');
 $this->params['breadcrumbs'][] = $this->title;
 
 ?>
@@ -198,7 +198,7 @@ $this->params['breadcrumbs'][] = $this->title;
     ]); ?>
     <hr/>
     <div>
-        <?= Html::a(Yii::t('app/modules/blog', 'Add new post'), ['blog/create'], ['class' => 'btn btn-success pull-right']) ?>
+        <?= Html::a(Yii::t('app/modules/blog', 'Add new post'), ['list/create'], ['class' => 'btn btn-success pull-right']) ?>
     </div>
     <?php Pjax::end(); ?>
 </div>

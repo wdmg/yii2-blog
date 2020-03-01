@@ -56,6 +56,39 @@ $this->params['breadcrumbs'][] = $this->title;
                     'style' => 'display:inline-block;max-height:360px;overflow-x:auto;'
                 ]
             ],
+            [
+                'attribute' => 'categories',
+                'label' => Yii::t('app/modules/blog', 'Categories'),
+                'format' => 'html',
+                'value' => function($data) {
+                    if ($categories = $data->categories) {
+                        $output = [];
+                        foreach ($categories as $category) {
+                            $output[] = Html::a($category->name, $category->url);
+                        }
+                        return implode(", ", $output);
+                    } else {
+                        return null;
+                    }
+                }
+            ],
+            [
+                'attribute' => 'tags',
+                'label' => Yii::t('app/modules/blog', 'Tags'),
+                'format' => 'html',
+                'value' => function($data) {
+                    if ($tags = $data->tags) {
+                        $output = [];
+                        foreach ($tags as $tag) {
+                            $output[] = Html::a($tag->name, $tag->url);
+                        }
+                        return implode(", ", $output);
+                    } else {
+                        return null;
+                    }
+                }
+            ],
+
             'description:ntext',
             'keywords:ntext',
             [
@@ -162,7 +195,7 @@ $this->params['breadcrumbs'][] = $this->title;
     ]); ?>
     <hr/>
     <div class="form-group">
-        <?= Html::a(Yii::t('app/modules/blog', '&larr; Back to list'), ['blog/index'], ['class' => 'btn btn-default pull-left']) ?>&nbsp;
-        <?= Html::a(Yii::t('app/modules/blog', 'Update'), ['blog/update', 'id' => $model->id], ['class' => 'btn btn-primary pull-right']) ?>
+        <?= Html::a(Yii::t('app/modules/blog', '&larr; Back to list'), ['list/index'], ['class' => 'btn btn-default pull-left']) ?>&nbsp;
+        <?= Html::a(Yii::t('app/modules/blog', 'Update'), ['list/update', 'id' => $model->id], ['class' => 'btn btn-primary pull-right']) ?>
     </div>
 </div>

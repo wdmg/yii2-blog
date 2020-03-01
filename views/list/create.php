@@ -6,7 +6,7 @@ use yii\helpers\Html;
 /* @var $model wdmg\blog\models\Blog */
 
 $this->title = Yii::t('app/modules/blog', 'New post');
-$this->params['breadcrumbs'][] = ['label' => $this->context->module->name, 'url' => ['blog/index']];
+$this->params['breadcrumbs'][] = ['label' => Yii::t('app/modules/blog', 'All posts'), 'url' => ['list/index']];
 $this->params['breadcrumbs'][] = $this->title;
 ?>
 <div class="page-header">
@@ -16,6 +16,6 @@ $this->params['breadcrumbs'][] = $this->title;
     <?= $this->render('_form', [
         'module' => $module,
         'model' => $model,
-        'statusModes' => $model->getStatusesList(),
+        'statusModes' => $model->getStatusesList()
     ]); ?>
 </div>

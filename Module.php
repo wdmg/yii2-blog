@@ -6,7 +6,7 @@ namespace wdmg\blog;
  * Yii2 Blog
  *
  * @category        Module
- * @version         1.0.0
+ * @version         1.0.1
  * @author          Alexsander Vyshnyvetskyy <alex.vyshnyvetskyy@gmail.com>
  * @link            https://github.com/wdmg/yii2-blog
  * @copyright       Copyright (c) 2019 W.D.M.Group, Ukraine
@@ -31,7 +31,7 @@ class Module extends BaseModule
     /**
      * {@inheritdoc}
      */
-    public $defaultRoute = "blog/index";
+    public $defaultRoute = "blog/list";
 
     /**
      * @var string, the name of module
@@ -46,7 +46,7 @@ class Module extends BaseModule
     /**
      * @var string the module version
      */
-    private $version = "1.0.0";
+    private $version = "1.0.1";
 
     /**
      * @var integer, priority of initialization
@@ -57,6 +57,8 @@ class Module extends BaseModule
      * @var string the default routes to render blog (use "/" - for root)
      */
     public $blogRoute = "/blog";
+    public $blogCategoriesRoute = "/blog/categories";
+    public $blogTagsRoute = "/blog/tags";
 
     /**
      * @var string, the default layout to render blog
@@ -97,7 +99,24 @@ class Module extends BaseModule
             'label' => $this->name,
             'url' => [$this->routePrefix . '/'. $this->id],
             'icon' => 'fa fa-fw fa-feather-alt',
-            'active' => in_array(\Yii::$app->controller->module->id, [$this->id])
+            'active' => in_array(\Yii::$app->controller->module->id, [$this->id]),
+            'items' => [
+                [
+                    'label' => Yii::t('app/modules/blog', 'All posts'),
+                    'url' => [$this->routePrefix . '/blog/list/'],
+                    'active' => (in_array(\Yii::$app->controller->module->id, ['content']) &&  Yii::$app->controller->id == 'blocks'),
+                ],
+                [
+                    'label' => Yii::t('app/modules/blog', 'Categories'),
+                    'url' => [$this->routePrefix . '/blog/cats/'],
+                    'active' => (in_array(\Yii::$app->controller->module->id, ['content']) &&  Yii::$app->controller->id == 'lists'),
+                ],
+                [
+                    'label' => Yii::t('app/modules/blog', 'Tags list'),
+                    'url' => [$this->routePrefix . '/blog/tags/'],
+                    'active' => (in_array(\Yii::$app->controller->module->id, ['content']) &&  Yii::$app->controller->id == 'lists'),
+                ]
+            ]
         ];
         return $items;
     }

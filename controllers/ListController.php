@@ -11,9 +11,9 @@ use wdmg\blog\models\Blog;
 use wdmg\blog\models\BlogSearch;
 
 /**
- * BlogController implements the CRUD actions for Blog model.
+ * ListController implements the CRUD actions for Blog model.
  */
-class BlogController extends Controller
+class ListController extends Controller
 {
 
     /**
@@ -30,8 +30,6 @@ class BlogController extends Controller
                     'delete' => ['post'],
                     'create' => ['get', 'post'],
                     'update' => ['get', 'post'],
-                    'export' => ['get'],
-                    'import' => ['post'],
                 ],
             ],
             'access' => [
@@ -62,7 +60,7 @@ class BlogController extends Controller
     }
 
     /**
-     * Lists of all Blog models.
+     * Lists of all Blog posts models.
      * @return mixed
      */
     public function actionIndex()
@@ -79,7 +77,7 @@ class BlogController extends Controller
 
 
     /**
-     * Creates a new Blog model.
+     * Creates a new Blog post model.
      * If creation is successful, the browser will be redirected to the list of pages.
      * @return mixed
      */
@@ -116,7 +114,7 @@ class BlogController extends Controller
                         Yii::t('app/modules/blog', 'An error occurred while add the new post.')
                     );
 
-                return $this->redirect(['blog/index']);
+                return $this->redirect(['index']);
             }
         }
 
@@ -128,7 +126,7 @@ class BlogController extends Controller
     }
 
     /**
-     * Updates an existing Blog model.
+     * Updates an existing Blog post model.
      * If update is successful, the browser will be redirected to the 'view' page.
      * @param integer $id
      * @return mixed
@@ -203,7 +201,7 @@ class BlogController extends Controller
     }
 
     /**
-     * Displays a single Blog model.
+     * Displays a single Blog post model.
      * @param integer $id
      * @return mixed
      * @throws NotFoundHttpException if the model cannot be found
@@ -218,7 +216,7 @@ class BlogController extends Controller
     }
 
     /**
-     * Deletes an existing Blog model.
+     * Deletes an existing Blog post model.
      * If deletion is successful, the browser will be redirected to the 'index' page.
      * @param integer $id
      * @return mixed
@@ -260,7 +258,7 @@ class BlogController extends Controller
 
 
     /**
-     * Finds the Blog model based on its primary key value.
+     * Finds the Blog post model based on its primary key value.
      * If the model is not found, a 404 HTTP exception will be thrown.
      * @param integer $id
      * @return blog model item
@@ -272,6 +270,6 @@ class BlogController extends Controller
             return $model;
         }
 
-        throw new NotFoundHttpException(Yii::t('app/modules/blog', 'The requested blog does not exist.'));
+        throw new NotFoundHttpException(Yii::t('app/modules/blog', 'The requested blog post does not exist.'));
     }
 }

@@ -11,6 +11,9 @@ use yii\base\InvalidArgumentException;
 use yii\behaviors\TimestampBehavior;
 use yii\behaviors\BlameableBehavior;
 use yii\behaviors\SluggableBehavior;
+use wdmg\blog\models\Categories;
+use wdmg\blog\models\Tags;
+use wdmg\blog\models\Taxonomy;
 
 /**
  * This is the model class for table "{{%blog}}".
@@ -38,8 +41,11 @@ use yii\behaviors\SluggableBehavior;
 class Blog extends ActiveRecord
 {
     public $route;
+
     const POST_STATUS_DRAFT = 0; // Blog post has draft
     const POST_STATUS_PUBLISHED = 1; // Blog post has been published
+    const TAXONOMY_CATEGORIES = 0; // Post taxnonomy by categories
+    const TAXONOMY_TAGS = 1; // Post taxnonomy by tags
 
     public $file;
     public $url;
@@ -182,25 +188,6 @@ class Blog extends ActiveRecord
     /**
      * @return string
      */
-    public function getRoute()
-    {
-
-        if (isset(Yii::$app->params["blog.blogRoute"])) {
-            $blogRoute = Yii::$app->params["blog.blogRoute"];
-        } else {
-
-            if (!$module = Yii::$app->getModule('admin/blog'))
-                $module = Yii::$app->getModule('blog');
-
-            $blogRoute = $module->blogRoute;
-        }
-
-        return $blogRoute;
-    }
-
-    /**
-     * @return string
-     */
     public function getImagePath($absoluteUrl = false)
     {
 
@@ -219,25 +206,6 @@ class Blog extends ActiveRecord
         else
             return $blogImagePath;
 
-    }
-
-    /**
-     *
-     * @param $withScheme boolean, absolute or relative URL
-     * @return string or null
-     */
-    public function getPostUrl($withScheme = true, $realUrl = false)
-    {
-        $this->route = $this->getRoute();
-        if (isset($this->alias)) {
-            if ($this->status == self::POST_STATUS_DRAFT && $realUrl)
-                return \yii\helpers\Url::to(['default/view', 'alias' => $this->alias, 'draft' => 'true'], $withScheme);
-            else
-                return \yii\helpers\Url::to($this->route . '/' .$this->alias, $withScheme);
-
-        } else {
-            return null;
-        }
     }
 
     /**
@@ -323,6 +291,97 @@ class Blog extends ActiveRecord
     }
 
     /**
+     * @return object of \yii\db\ActiveQuery
+     */
+    public function getCategories($id = null, $asArray = false) {
+
+        if (!is_integer($id) && !is_string($id))
+            $id = $this->id;
+
+        $query = Categories::find()->alias('cats')
+            ->select(['cats.name', 'cats.parent_id', 'cats.alias', 'cats.title', 'cats.description', 'cats.keywords'])
+            ->leftJoin(['taxonomy' => Taxonomy::tableName()], '`taxonomy`.`taxonomy_id` = `cats`.`id`')
+            ->where([
+                'taxonomy.type' => self::TAXONOMY_CATEGORIES
+            ]);
+
+        if (is_integer($id))
+            $query->andWhere([
+                'taxonomy.post_id' => intval($id)
+            ]);
+
+        if ($asArray)
+            return $query->asArray()->all();
+        else
+            return $query->all();
+
+    }
+
+    /**
+     * @return object of \yii\db\ActiveQuery
+     */
+    public function getTags($id = null, $asArray = false) {
+
+        if (!is_integer($id) && !is_string($id))
+            $id = $this->id;
+
+        $query = Tags::find()->alias('tags')
+            ->select(['tags.name', 'tags.alias', 'tags.title', 'tags.description', 'tags.keywords'])
+            ->leftJoin(['taxonomy' => Taxonomy::tableName()], '`taxonomy`.`taxonomy_id` = `tags`.`id`')
+            ->where([
+                'taxonomy.type' => self::TAXONOMY_TAGS
+            ]);
+
+        if (is_integer($id))
+            $query->andWhere([
+                'taxonomy.post_id' => intval($id)
+            ]);
+
+        if ($asArray)
+            return $query->asArray()->all();
+        else
+            return $query->all();
+
+    }
+
+    /**
+     * @return string
+     */
+    public function getRoute()
+    {
+        if (isset(Yii::$app->params["blog.blogRoute"])) {
+            $route = Yii::$app->params["blog.blogRoute"];
+        } else {
+
+            if (!$module = Yii::$app->getModule('admin/blog'))
+                $module = Yii::$app->getModule('blog');
+
+            $route = $module->blogRoute;
+        }
+
+        return $route;
+    }
+
+    /**
+     *
+     * @param $withScheme boolean, absolute or relative URL
+     * @return string or null
+     */
+    public function getPostUrl($withScheme = true, $realUrl = false)
+    {
+        $this->route = $this->getRoute();
+        if (isset($this->alias)) {
+            if ($this->status == self::POST_STATUS_DRAFT && $realUrl)
+                return \yii\helpers\Url::to(['default/view', 'alias' => $this->alias, 'draft' => 'true'], $withScheme);
+            else
+                return \yii\helpers\Url::to($this->route . '/' .$this->alias, $withScheme);
+
+        } else {
+            return null;
+        }
+    }
+
+    /**
      * Returns the URL to the view of the current model
      *
      * @return string
@@ -334,5 +393,4 @@ class Blog extends ActiveRecord
 
         return $this->url;
     }
-
 }
