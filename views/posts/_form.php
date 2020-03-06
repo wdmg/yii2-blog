@@ -1,8 +1,9 @@
 <?php
 
+use wdmg\widgets\TagsInput;
 use yii\helpers\Html;
 use yii\helpers\Url;
-use yii\widgets\ActiveForm;
+use yii\bootstrap\ActiveForm;
 use wdmg\widgets\Editor;
 use wdmg\widgets\SelectInput;
 
@@ -51,6 +52,23 @@ use wdmg\widgets\SelectInput;
             }
         ?>
 
+        <?= $form->field($model, 'categories')->inline(false)->checkboxList($categoriesList) ?>
+
+        <?= $form->field($model, 'tags')->widget(TagsInput::class, [
+            'options' => [
+                'class' => 'form-control'
+            ],
+            'pluginOptions' => [
+                'autocomplete' => Yii::$app->request->absoluteUrl,
+                'format' => 'json',
+                'minInput' => 2,
+                'maxTags' => 100
+            ]
+        ])->input('text', ['placeholder' => Yii::t('app/modules/blog', 'Type tags...')]); ?>
+
+        <?php // ])->input('text', ['value' => \yii\helpers\Json::encode($tagsList), 'placeholder' => Yii::t('app/modules/blog', 'Type tags...')]); ?>
+
+
         <?= $form->field($model, 'title')->textInput() ?>
         <?= $form->field($model, 'description')->textarea(['rows' => 3]) ?>
         <?= $form->field($model, 'keywords')->textarea(['rows' => 3]) ?>
@@ -82,7 +100,7 @@ use wdmg\widgets\SelectInput;
         ]); ?>
         <hr/>
         <div class="form-group">
-            <?= Html::a(Yii::t('app/modules/blog', '&larr; Back to list'), ['list/index'], ['class' => 'btn btn-default pull-left']) ?>&nbsp;
+            <?= Html::a(Yii::t('app/modules/blog', '&larr; Back to list'), ['posts/index'], ['class' => 'btn btn-default pull-left']) ?>&nbsp;
             <?= Html::submitButton(Yii::t('app/modules/blog', 'Save'), ['class' => 'btn btn-success pull-right']) ?>
         </div>
         <?php ActiveForm::end(); ?>

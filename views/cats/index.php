@@ -51,7 +51,7 @@ $this->params['breadcrumbs'][] = $this->title;
 
                     if (mb_strlen($model->title) > 81)
                         $output .= '&nbsp;' . Html::tag('span', Html::tag('span', '', [
-                                'class' => 'fa fa-fw fa-warning',
+                                'class' => 'fa fa-fw fa-exclamation-triangle',
                                 'title' => Yii::t('app/modules/blog','Field exceeds the recommended length of {length} characters.', [
                                     'length' => 80
                                 ])
@@ -68,7 +68,7 @@ $this->params['breadcrumbs'][] = $this->title;
 
                     if (mb_strlen($model->description) > 161)
                         $output .= '&nbsp;' . Html::tag('span', Html::tag('span', '', [
-                                'class' => 'fa fa-fw fa-warning',
+                                'class' => 'fa fa-fw fa-exclamation-triangle',
                                 'title' => Yii::t('app/modules/blog','Field exceeds the recommended length of {length} characters.', [
                                     'length' => 160
                                 ])
@@ -85,7 +85,7 @@ $this->params['breadcrumbs'][] = $this->title;
 
                     if (mb_strlen($model->keywords) > 181)
                         $output .= '&nbsp;' . Html::tag('span', Html::tag('span', '', [
-                                'class' => 'fa fa-fw fa-warning',
+                                'class' => 'fa fa-fw fa-exclamation-triangle',
                                 'title' => Yii::t('app/modules/blog','Field exceeds the recommended length of {length} characters.', [
                                     'length' => 180
                                 ])

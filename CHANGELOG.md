@@ -1,6 +1,9 @@
 Changelog
 =========
 
+## 1.1.0 (2020-03-06)
+ * Added CRUD for taxonomy (Categories, Tags)
+ 
 ## 1.0.1 (2020-03-02)
  * Added migrations, CRUD and models for Categories, Tags
  

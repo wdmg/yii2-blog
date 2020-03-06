@@ -8,7 +8,7 @@ use yii\helpers\Html;
 $this->title = Yii::t('app/modules/blog', 'Updating post: {name}', [
     'name' => $model->name,
 ]);
-$this->params['breadcrumbs'][] = ['label' => Yii::t('app/modules/blog', 'All posts'), 'url' => ['index']];
+$this->params['breadcrumbs'][] = ['label' => Yii::t('app/modules/blog', 'All posts'), 'url' => ['posts/index']];
 $this->params['breadcrumbs'][] = Yii::t('app/modules/blog', 'Edit');
 
 
@@ -20,6 +20,8 @@ $this->params['breadcrumbs'][] = Yii::t('app/modules/blog', 'Edit');
     <?= $this->render('_form', [
         'module' => $module,
         'model' => $model,
+        'categoriesList' => $model->getAllCategoriesList(false),
+        'tagsList' => $model->getTagsList(),
         'statusModes' => $model->getStatusesList(),
     ]); ?>
 </div>

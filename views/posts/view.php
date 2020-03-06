@@ -8,7 +8,7 @@ use yii\widgets\DetailView;
 /* @var $model wdmg\blog\models\Blog */
 
 $this->title = Yii::t('app/modules/blog', 'View blog post');
-$this->params['breadcrumbs'][] = ['label' => $this->context->module->name, 'url' => ['blog/index']];
+$this->params['breadcrumbs'][] = ['label' => $this->context->module->name, 'url' => ['posts/index']];
 $this->params['breadcrumbs'][] = $this->title;
 ?>
 <div class="page-header">
@@ -98,7 +98,7 @@ $this->params['breadcrumbs'][] = $this->title;
                     if ($data->in_sitemap)
                         return '<span class="fa fa-check text-success"></span>';
                     else
-                        return '<span class="fa fa-remove text-danger"></span>';
+                        return '<span class="fa fa-times text-danger"></span>';
                 }
             ],
             [
@@ -108,7 +108,7 @@ $this->params['breadcrumbs'][] = $this->title;
                     if ($data->in_rss)
                         return '<span class="fa fa-check text-success"></span>';
                     else
-                        return '<span class="fa fa-remove text-danger"></span>';
+                        return '<span class="fa fa-times text-danger"></span>';
                 }
             ],
             [
@@ -118,7 +118,7 @@ $this->params['breadcrumbs'][] = $this->title;
                     if ($data->in_turbo)
                         return '<span class="fa fa-check text-success"></span>';
                     else
-                        return '<span class="fa fa-remove text-danger"></span>';
+                        return '<span class="fa fa-times text-danger"></span>';
                 }
             ],
             [
@@ -128,7 +128,7 @@ $this->params['breadcrumbs'][] = $this->title;
                     if ($data->in_amp)
                         return '<span class="fa fa-check text-success"></span>';
                     else
-                        return '<span class="fa fa-remove text-danger"></span>';
+                        return '<span class="fa fa-times text-danger"></span>';
                 }
             ],
             [

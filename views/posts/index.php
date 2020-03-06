@@ -50,7 +50,7 @@ $this->params['breadcrumbs'][] = $this->title;
 
                     if (mb_strlen($model->title) > 81)
                         $output .= '&nbsp;' . Html::tag('span', Html::tag('span', '', [
-                                'class' => 'fa fa-fw fa-warning',
+                                'class' => 'fa fa-fw fa-exclamation-triangle',
                                 'title' => Yii::t('app/modules/blog','Field exceeds the recommended length of {length} characters.', [
                                     'length' => 80
                                 ])
@@ -67,7 +67,7 @@ $this->params['breadcrumbs'][] = $this->title;
 
                     if (mb_strlen($model->description) > 161)
                         $output .= '&nbsp;' . Html::tag('span', Html::tag('span', '', [
-                                'class' => 'fa fa-fw fa-warning',
+                                'class' => 'fa fa-fw fa-exclamation-triangle',
                                 'title' => Yii::t('app/modules/blog','Field exceeds the recommended length of {length} characters.', [
                                     'length' => 160
                                 ])
@@ -84,7 +84,7 @@ $this->params['breadcrumbs'][] = $this->title;
 
                     if (mb_strlen($model->keywords) > 181)
                         $output .= '&nbsp;' . Html::tag('span', Html::tag('span', '', [
-                                'class' => 'fa fa-fw fa-warning',
+                                'class' => 'fa fa-fw fa-exclamation-triangle',
                                 'title' => Yii::t('app/modules/blog','Field exceeds the recommended length of {length} characters.', [
                                     'length' => 180
                                 ])
@@ -106,7 +106,7 @@ $this->params['breadcrumbs'][] = $this->title;
                     if ($data->in_sitemap)
                         return '<span class="fa fa-check text-success"></span>';
                     else
-                        return '<span class="fa fa-remove text-danger"></span>';
+                        return '<span class="fa fa-times text-danger"></span>';
                 }
             ],
             [
@@ -122,7 +122,7 @@ $this->params['breadcrumbs'][] = $this->title;
                     if ($data->in_rss)
                         return '<span class="fa fa-check text-success"></span>';
                     else
-                        return '<span class="fa fa-remove text-danger"></span>';
+                        return '<span class="fa fa-times text-danger"></span>';
                 }
             ],
             [
@@ -138,7 +138,7 @@ $this->params['breadcrumbs'][] = $this->title;
                     if ($data->in_turbo)
                         return '<span class="fa fa-check text-success"></span>';
                     else
-                        return '<span class="fa fa-remove text-danger"></span>';
+                        return '<span class="fa fa-times text-danger"></span>';
                 }
             ],
             [
@@ -154,7 +154,7 @@ $this->params['breadcrumbs'][] = $this->title;
                     if ($data->in_amp)
                         return '<span class="fa fa-check text-success"></span>';
                     else
-                        return '<span class="fa fa-remove text-danger"></span>';
+                        return '<span class="fa fa-times text-danger"></span>';
                 }
             ],
             [
@@ -198,7 +198,7 @@ $this->params['breadcrumbs'][] = $this->title;
     ]); ?>
     <hr/>
     <div>
-        <?= Html::a(Yii::t('app/modules/blog', 'Add new post'), ['list/create'], ['class' => 'btn btn-success pull-right']) ?>
+        <?= Html::a(Yii::t('app/modules/blog', 'Add new post'), ['posts/create'], ['class' => 'btn btn-success pull-right']) ?>
     </div>
     <?php Pjax::end(); ?>
 </div>

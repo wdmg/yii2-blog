@@ -11,9 +11,9 @@ use wdmg\blog\models\Blog;
 use wdmg\blog\models\BlogSearch;
 
 /**
- * ListController implements the CRUD actions for Blog model.
+ * PostsController implements the CRUD actions for Blog model.
  */
-class ListController extends Controller
+class PostsController extends Controller
 {
 
     /**
@@ -86,6 +86,18 @@ class ListController extends Controller
         $model = new Blog();
         $model->status = $model::POST_STATUS_DRAFT;
 
+        // Autocomplete for tags list
+        if (Yii::$app->request->isAjax && ($value = Yii::$app->request->get('value'))) {
+
+            $response = [];
+            $list = $model->getAllTags(['like', 'name', $value], ['id', 'name'], true);
+            foreach ($list as $id => $item) {
+                $response['tag_id:'.$id] = $item['name'];
+            }
+
+            return $this->asJson($response);
+        }
+
         if (Yii::$app->request->isAjax) {
             if ($model->load(Yii::$app->request->post())) {
                 if ($model->validate())
@@ -135,6 +147,18 @@ class ListController extends Controller
     public function actionUpdate($id)
     {
         $model = $this->findModel($id);
+
+        // Autocomplete for tags list
+        if (Yii::$app->request->isAjax && ($value = Yii::$app->request->get('value'))) {
+
+            $response = [];
+            $list = $model->getAllTags(['like', 'name', $value], ['id', 'name'], true);
+            foreach ($list as $id => $item) {
+                $response['tag_id:'.$id] = $item['name'];
+            }
+
+            return $this->asJson($response);
+        }
 
         // Get current URL before save this blog item
         $oldPostUrl = $model->getPostUrl(false);

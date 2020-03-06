@@ -6,7 +6,7 @@ namespace wdmg\blog;
  * Yii2 Blog
  *
  * @category        Module
- * @version         1.0.1
+ * @version         1.1.0
  * @author          Alexsander Vyshnyvetskyy <alex.vyshnyvetskyy@gmail.com>
  * @link            https://github.com/wdmg/yii2-blog
  * @copyright       Copyright (c) 2019 W.D.M.Group, Ukraine
@@ -46,7 +46,7 @@ class Module extends BaseModule
     /**
      * @var string the module version
      */
-    private $version = "1.0.1";
+    private $version = "1.1.0";
 
     /**
      * @var integer, priority of initialization
@@ -103,7 +103,7 @@ class Module extends BaseModule
             'items' => [
                 [
                     'label' => Yii::t('app/modules/blog', 'All posts'),
-                    'url' => [$this->routePrefix . '/blog/list/'],
+                    'url' => [$this->routePrefix . '/blog/posts/'],
                     'active' => (in_array(\Yii::$app->controller->module->id, ['content']) &&  Yii::$app->controller->id == 'blocks'),
                 ],
                 [

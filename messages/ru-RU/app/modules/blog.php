@@ -61,6 +61,10 @@ return [
     'Updating tag: {name}' => "Редактирование тега: {name}",
     'Tag URL' => "URL тега",
 
+    'The value of field `{attribute}` must be a valid JSON, error: {error}.' => "Значение атрибута `{attribute}` должно быть валидным JSON, ошибка: {error}.",
+    'Param attribute must be unique.' => "параметр атрибута должен быть уникальным.",
+    'It allowed only Latin alphabet, numbers and the «-», «_» characters.' => "Разрешена только латинница, цифры и «-», «_» символы.",
+
     'Category has been successfully added!' => "Категория была успешно добавлена!",
     'An error occurred while add the new category.' => "Произошла ошбка при добавлении новой категории.",
     'OK! Category `{name}` successfully updated.' => "OK! Категория была успешно обновлена.",
