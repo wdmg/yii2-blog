@@ -66,6 +66,13 @@ class PostsController extends Controller
     public function actionIndex()
     {
         $searchModel = new BlogSearch();
+
+        if ($cat_id = Yii::$app->request->get('cat_id', null))
+            $searchModel->categories = intval($cat_id);
+
+        if ($tag_id = Yii::$app->request->get('tag_id', null))
+            $searchModel->tags = intval($tag_id);
+
         $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
 
         return $this->render('index', [

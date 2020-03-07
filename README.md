@@ -64,6 +64,6 @@ Use the `Module::dashboardNavItems()` method of the module to generate a navigat
     ?>
 
 # Status and version [in progress development]
+* v.1.1.1 -  Filter posts by categories and tags (view dashboard)
 * v.1.1.0 -  Added CRUD for taxonomy (Categories, Tags)
 * v.1.0.1 -  Added migrations, CRUD and models for Categories, Tags
-* v.1.0.0 -  Module has ported from wdmg/yii2-news and prepare

@@ -2,8 +2,10 @@
 
 namespace wdmg\blog\models;
 
+use Yii;
 use yii\base\Model;
 use yii\data\ActiveDataProvider;
+use wdmg\validators\JsonValidator;
 use wdmg\blog\models\Blog;
 
 /**
@@ -18,7 +20,7 @@ class BlogSearch extends Blog
     {
         return [
             [['id', 'in_sitemap', 'in_rss', 'in_turbo', 'in_amp'], 'integer'],
-            [['name', 'alias', 'excerpt', 'title', 'description', 'keywords', 'status'], 'safe'],
+            [['name', 'categories', 'tags', 'alias', 'excerpt', 'title', 'description', 'keywords', 'status'], 'safe'],
         ];
     }
 
@@ -40,7 +42,7 @@ class BlogSearch extends Blog
      */
     public function search($params)
     {
-        $query = Blog::find();
+        $query = Blog::find()->alias('blog');
 
         // add conditions that should always apply here
         $dataProvider = new ActiveDataProvider([
@@ -81,6 +83,22 @@ class BlogSearch extends Blog
 
         if ($this->status !== "*")
             $query->andFilterWhere(['like', 'status', $this->status]);
+
+        if (intval($this->categories) !== 0) {
+            $query->leftJoin(['taxonomy_cats' => Taxonomy::tableName()], '`taxonomy_cats`.`post_id` = `blog`.`id`');
+            $query->andFilterWhere([
+                'taxonomy_cats.type' => Blog::TAXONOMY_CATEGORIES,
+                'taxonomy_cats.taxonomy_id' => intval($this->categories)
+            ]);
+        }
+
+        if (intval($this->tags) !== 0) {
+            $query->leftJoin(['taxonomy_tags' => Taxonomy::tableName()], '`taxonomy_tags`.`post_id` = `blog`.`id`');
+            $query->andFilterWhere([
+                'taxonomy_tags.type' => Blog::TAXONOMY_TAGS,
+                'taxonomy_tags.taxonomy_id' => intval($this->tags)
+            ]);
+        }
 
         return $dataProvider;
     }

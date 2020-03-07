@@ -262,4 +262,30 @@ class Categories extends ActiveRecord
         return $this->url;
     }
 
+    /**
+     * @return object of \yii\db\ActiveQuery
+     */
+    public function getPosts($cat_id = null, $asArray = false) {
+
+        if (!($cat_id === false) && !is_integer($cat_id) && !is_string($cat_id))
+            $cat_id = $this->id;
+
+        $query = Blog::find()->alias('blog')
+            ->select(['blog.id', 'blog.name', 'blog.alias', 'blog.content', 'blog.title', 'blog.description', 'blog.keywords'])
+            ->leftJoin(['taxonomy' => Taxonomy::tableName()], '`taxonomy`.`post_id` = `blog`.`id`')
+            ->where([
+                'taxonomy.type' => Blog::TAXONOMY_CATEGORIES,
+            ]);
+
+        if (is_integer($cat_id))
+            $query->andWhere([
+                'taxonomy.taxonomy_id' => intval($cat_id)
+            ]);
+
+        if ($asArray)
+            return $query->asArray()->all();
+        else
+            return $query->all();
+
+    }
 }

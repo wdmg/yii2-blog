@@ -38,6 +38,19 @@ $this->params['breadcrumbs'][] = $this->title;
             'title:ntext',
             'description:ntext',
             'keywords:ntext',
+
+            [
+                'attribute' => 'posts',
+                'label' => Yii::t('app/modules/blog', 'Posts'),
+                'format' => 'html',
+                'value' => function($data) {
+                    if ($posts = $data->posts) {
+                        return Html::a(count($posts), ['posts/index', 'tag_id' => $data->id]);
+                    } else {
+                        return 0;
+                    }
+                }
+            ],
             [
                 'attribute' => 'created',
                 'label' => Yii::t('app/modules/blog','Created'),

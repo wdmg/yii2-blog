@@ -96,6 +96,19 @@ $this->params['breadcrumbs'][] = $this->title;
             ],
 
             [
+                'attribute' => 'posts',
+                'label' => Yii::t('app/modules/blog', 'Posts'),
+                'format' => 'html',
+                'value' => function($data) {
+                    if ($posts = $data->posts) {
+                        return Html::a(count($posts), ['posts/index', 'cat_id' => $data->id]);
+                    } else {
+                        return 0;
+                    }
+                }
+            ],
+
+            [
                 'class' => 'yii\grid\ActionColumn',
                 'header' => Yii::t('app/modules/blog','Actions'),
                 'headerOptions' => [

@@ -93,8 +93,65 @@ $this->params['breadcrumbs'][] = $this->title;
                     return $output;
                 }
             ],
+
             [
-                'attribute' => 'in_sitemap',
+                'attribute' => 'categories',
+                'format' => 'html',
+                'filter' => SelectInput::widget([
+                    'model' => $searchModel,
+                    'attribute' => 'categories',
+                    'items' => $searchModel->getAllCategoriesList(true),
+                    'options' => [
+                        'id' => 'blogsearch-categories',
+                        'class' => 'form-control'
+                    ]
+                ]),
+                'headerOptions' => [
+                    'class' => 'text-center'
+                ],
+                'contentOptions' => [
+                    'class' => 'text-center'
+                ],
+                'value' => function($data) {
+                    if ($categories = $data->getCategories()) {
+                        $output = [];
+                        foreach ($categories as $category) {
+                            $output[] = Html::a($category->name, ['cats/view', 'id' => $category->id]);
+                        }
+                        return implode(", ", $output);
+                    } else {
+                        return null;
+                    }
+                }
+            ],
+            [
+                'attribute' => 'tags',
+                'format' => 'html',
+                'filter' => SelectInput::widget([
+                    'model' => $searchModel,
+                    'attribute' => 'tags',
+                    'items' => $searchModel->getAllTagsList(true),
+                    'options' => [
+                        'id' => 'blogsearch-tags',
+                        'class' => 'form-control'
+                    ]
+                ]),
+                'value' => function($data) {
+                    if ($tags = $data->getTags()) {
+                        $output = [];
+                        foreach ($tags as $tag) {
+                            $output[] = Html::a($tag->name, ['tags/view', 'id' => $tag->id]);
+                        }
+                        return implode(", ", $output);
+                    } else {
+                        return null;
+                    }
+                }
+            ],
+
+            [
+                'attribute' => 'common',
+                'label' => Yii::t('app/modules/blog','Common'),
                 'format' => 'html',
                 'headerOptions' => [
                     'class' => 'text-center'
@@ -103,58 +160,34 @@ $this->params['breadcrumbs'][] = $this->title;
                     'class' => 'text-center'
                 ],
                 'value' => function($data) {
+                    $output = '';
                     if ($data->in_sitemap)
-                        return '<span class="fa fa-check text-success"></span>';
+                        $output .= '<span class="fa fa-fw fa-sitemap text-success" title="' . Yii::t('app/modules/blog','Present in sitemap') . '"></span>';
                     else
-                        return '<span class="fa fa-times text-danger"></span>';
-                }
-            ],
-            [
-                'attribute' => 'in_rss',
-                'format' => 'html',
-                'headerOptions' => [
-                    'class' => 'text-center'
-                ],
-                'contentOptions' => [
-                    'class' => 'text-center'
-                ],
-                'value' => function($data) {
+                        $output .= '<span class="fa fa-fw fa-sitemap text-danger" title="' . Yii::t('app/modules/blog','Not present in sitemap') . '"></span>';
+
+                    $output .= "&nbsp;";
+
                     if ($data->in_rss)
-                        return '<span class="fa fa-check text-success"></span>';
+                        $output .= '<span class="fa fa-fw fa-rss text-success" title="' . Yii::t('app/modules/blog','Present in RSS-feed') . '"></span>';
                     else
-                        return '<span class="fa fa-times text-danger"></span>';
-                }
-            ],
-            [
-                'attribute' => 'in_turbo',
-                'format' => 'html',
-                'headerOptions' => [
-                    'class' => 'text-center'
-                ],
-                'contentOptions' => [
-                    'class' => 'text-center'
-                ],
-                'value' => function($data) {
+                        $output .= '<span class="fa fa-fw fa-rss text-danger" title="' . Yii::t('app/modules/blog','Not present in RSS-feed') . '"></span>';
+
+                    $output .= "&nbsp;";
+
                     if ($data->in_turbo)
-                        return '<span class="fa fa-check text-success"></span>';
+                        $output .= '<span class="fa fa-fw fa-rocket text-success" title="' . Yii::t('app/modules/blog','Present in Yandex.Turbo') . '"></span>';
                     else
-                        return '<span class="fa fa-times text-danger"></span>';
-                }
-            ],
-            [
-                'attribute' => 'in_amp',
-                'format' => 'html',
-                'headerOptions' => [
-                    'class' => 'text-center'
-                ],
-                'contentOptions' => [
-                    'class' => 'text-center'
-                ],
-                'value' => function($data) {
+                        $output .= '<span class="fa fa-fw fa-rocket text-danger" title="' . Yii::t('app/modules/blog','Not present in Yandex.Turbo') . '"></span>';
+
+                    $output .= "&nbsp;";
+
                     if ($data->in_amp)
-                        return '<span class="fa fa-check text-success"></span>';
+                        $output .= '<span class="fa fa-fw fa-bolt text-success" title="' . Yii::t('app/modules/blog','Present in Google AMP') . '"></span>';
                     else
-                        return '<span class="fa fa-times text-danger"></span>';
+                        $output .= '<span class="fa fa-fw fa-bolt text-danger" title="' . Yii::t('app/modules/blog','Not present in Google AMP') . '"></span>';
+
+                    return $output;
                 }
             ],
             [

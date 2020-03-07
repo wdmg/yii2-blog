@@ -1,6 +1,10 @@
 Changelog
 =========
 
+## 1.1.1 (2020-03-07)
+ * Filter posts by categories and tags (view dashboard)
+ * Compact indicators for support modules
+ 
 ## 1.1.0 (2020-03-06)
  * Added CRUD for taxonomy (Categories, Tags)
  
