@@ -5,7 +5,7 @@ use yii\helpers\HtmlPurifier;
 use yii\helpers\Url;
 
 /* @var $this yii\web\View */
-/* @var $model wdmg\blog\models\Blog */
+/* @var $model wdmg\blog\models\Posts */
 
 if (!empty($model->title))
     $this->title = $model->title;

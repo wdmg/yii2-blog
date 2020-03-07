@@ -3,7 +3,7 @@
 use yii\helpers\Html;
 
 /* @var $this yii\web\View */
-/* @var $model wdmg\blog\models\Blog */
+/* @var $model wdmg\blog\models\Posts */
 
 $this->title = Yii::t('app/modules/blog', 'New post');
 $this->params['breadcrumbs'][] = ['label' => Yii::t('app/modules/blog', 'All posts'), 'url' => ['posts/index']];

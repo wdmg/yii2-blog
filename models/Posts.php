@@ -17,7 +17,7 @@ use wdmg\blog\models\Tags;
 use wdmg\blog\models\Taxonomy;
 
 /**
- * This is the model class for table "{{%blog}}".
+ * This is the model class for table "{{%blog_posts}}".
  *
  * @property int $id
  * @property string $name
@@ -39,7 +39,7 @@ use wdmg\blog\models\Taxonomy;
  * @property string $updated_at
  * @property integer $updated_by
  */
-class Blog extends ActiveRecord
+class Posts extends ActiveRecord
 {
     public $route;
 
@@ -59,7 +59,7 @@ class Blog extends ActiveRecord
      */
     public static function tableName()
     {
-        return '{{%blog}}';
+        return '{{%blog_posts}}';
     }
 
     /**
@@ -203,6 +203,10 @@ class Blog extends ActiveRecord
         if (is_string($this->tags) && JsonValidator::isValid($this->tags)) {
             $this->tags = \yii\helpers\Json::decode($this->tags);
         }
+
+        // Set default category if category not be selected
+        if ($insert && empty($this->categories))
+            $this->categories = [1];
 
         return parent::beforeSave($insert);
     }

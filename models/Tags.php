@@ -225,11 +225,11 @@ class Tags extends ActiveRecord
         if (!($tag_id === false) && !is_integer($tag_id) && !is_string($tag_id))
             $tag_id = $this->id;
 
-        $query = Blog::find()->alias('blog')
+        $query = Posts::find()->alias('blog')
             ->select(['blog.id', 'blog.name', 'blog.alias', 'blog.content', 'blog.title', 'blog.description', 'blog.keywords'])
             ->leftJoin(['taxonomy' => Taxonomy::tableName()], '`taxonomy`.`post_id` = `blog`.`id`')
             ->where([
-                'taxonomy.type' => Blog::TAXONOMY_TAGS,
+                'taxonomy.type' => Posts::TAXONOMY_TAGS,
             ]);
 
         if (is_integer($tag_id))

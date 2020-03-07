@@ -5,7 +5,7 @@ use yii\helpers\Url;
 use yii\widgets\DetailView;
 
 /* @var $this yii\web\View */
-/* @var $model wdmg\blog\models\Blog */
+/* @var $model wdmg\blog\models\Posts */
 
 $this->title = Yii::t('app/modules/blog', 'View blog post');
 $this->params['breadcrumbs'][] = ['label' => $this->context->module->name, 'url' => ['posts/index']];
@@ -192,7 +192,7 @@ $this->params['breadcrumbs'][] = $this->title;
     ]); ?>
     <hr/>
     <div class="form-group">
-        <?= Html::a(Yii::t('app/modules/blog', '&larr; Back to list'), ['list/index'], ['class' => 'btn btn-default pull-left']) ?>&nbsp;
-        <?= Html::a(Yii::t('app/modules/blog', 'Update'), ['list/update', 'id' => $model->id], ['class' => 'btn btn-primary pull-right']) ?>
+        <?= Html::a(Yii::t('app/modules/blog', '&larr; Back to list'), ['posts/index'], ['class' => 'btn btn-default pull-left']) ?>&nbsp;
+        <?= Html::a(Yii::t('app/modules/blog', 'Update'), ['posts/update', 'id' => $model->id], ['class' => 'btn btn-primary pull-right']) ?>
     </div>
 </div>

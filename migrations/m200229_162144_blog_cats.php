@@ -65,6 +65,13 @@ class m200229_162144_blog_cats extends Migration
                 'CASCADE'
             );
         }
+
+        $this->insert('{{%blog_cats}}', [
+            'id' => 1,
+            'name' => 'Uncategorized',
+            'alias' => 'uncategorized',
+            'title' => 'Uncategorized posts'
+        ]);
     }
 
     /**

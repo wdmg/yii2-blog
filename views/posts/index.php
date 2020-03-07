@@ -7,7 +7,7 @@ use yii\widgets\Pjax;
 use wdmg\widgets\SelectInput;
 
 /* @var $this yii\web\View */
-/* @var $model wdmg\blog\models\Blog */
+/* @var $model wdmg\blog\models\Posts */
 
 $this->title = Yii::t('app/modules/blog', 'All posts');
 $this->params['breadcrumbs'][] = $this->title;

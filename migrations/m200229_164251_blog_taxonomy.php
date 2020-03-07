@@ -30,7 +30,7 @@ class m200229_164251_blog_taxonomy extends Migration
             'fk_blog_taxonomy',
             '{{%blog_taxonomy}}',
             'post_id',
-            '{{%blog}}',
+            '{{%blog_posts}}',
             'id',
             'CASCADE',
             'CASCADE'

@@ -5,7 +5,7 @@ namespace wdmg\blog\controllers;
 use Yii;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
-use wdmg\blog\models\Blog;
+use wdmg\blog\models\Posts;
 use yii\data\ActiveDataProvider;
 
 /**
@@ -32,12 +32,12 @@ class DefaultController extends Controller
      *
      * @param string $blog aliases of searching blog.
      * @return mixed
-     * @see Blog::$alias
+     * @see Posts::$alias
      */
     public function actionIndex()
     {
         $dataProvider = new ActiveDataProvider([
-            'query' => Blog::find(),
+            'query' => Posts::find(),
             'pagination' => [
                 'pageSize' => 20,
             ],
@@ -55,7 +55,7 @@ class DefaultController extends Controller
      * @param string $blog aliases of searching blog.
      * @param boolean $draft flag of status searching blog.
      * @return mixed
-     * @see Blog::$alias
+     * @see Posts::$alias
      */
     public function actionView($alias, $draft = false)
     {
@@ -97,11 +97,11 @@ class DefaultController extends Controller
     protected function findModel($alias, $isDraft = false)
     {
 
-        $status = Blog::POST_STATUS_PUBLISHED;
+        $status = Posts::POST_STATUS_PUBLISHED;
         if ($isDraft)
-            $status = Blog::POST_STATUS_DRAFT;
+            $status = Posts::POST_STATUS_DRAFT;
 
-        $model = Blog::find()->where([
+        $model = Posts::find()->where([
             'alias' => $alias,
             'status' => $status,
         ])->one();

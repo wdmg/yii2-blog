@@ -58,6 +58,8 @@ return [
     'New tag' => "Новый тег",
     'View tag' => "Просмотр тега",
     'Add new tag' => "Добавить тег",
+    'Add new post' => "Добавить публикацию",
+    'Uncategorized' => "Без категории",
 
     'Updating tag: {name}' => "Редактирование тега: {name}",
     'Tag URL' => "URL тега",
@@ -89,6 +91,8 @@ return [
     'OK! Blog item `{name}` successfully deleted.' => "OK! Публикация была успешно удалена.",
     'An error occurred while deleting a blog item `{name}`.' => "Произошла ошбка при удалении публикации `{name}`.",
     'The requested blog post does not exist.' => "Запрошенная публикация не существует.",
+
+    'default' => "по-умолчанию",
 
     'Sitemap' => "Карта сайта",
     '- display in the sitemap' => "- отображать в карте сайта",

@@ -130,6 +130,14 @@ class Categories extends ActiveRecord
 
     }
 
+    public function beforeDelete()
+    {
+        if ($data->id === 1) // Category for uncategorized posts (undeleted).
+            return false;
+
+        return parent::beforeDelete();
+    }
+
     /**
      * @return object of \yii\db\ActiveQuery
      */
@@ -270,11 +278,11 @@ class Categories extends ActiveRecord
         if (!($cat_id === false) && !is_integer($cat_id) && !is_string($cat_id))
             $cat_id = $this->id;
 
-        $query = Blog::find()->alias('blog')
+        $query = Posts::find()->alias('blog')
             ->select(['blog.id', 'blog.name', 'blog.alias', 'blog.content', 'blog.title', 'blog.description', 'blog.keywords'])
             ->leftJoin(['taxonomy' => Taxonomy::tableName()], '`taxonomy`.`post_id` = `blog`.`id`')
             ->where([
-                'taxonomy.type' => Blog::TAXONOMY_CATEGORIES,
+                'taxonomy.type' => Posts::TAXONOMY_CATEGORIES,
             ]);
 
         if (is_integer($cat_id))

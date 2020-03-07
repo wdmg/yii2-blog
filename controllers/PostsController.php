@@ -7,8 +7,8 @@ use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
 use yii\filters\AccessControl;
-use wdmg\blog\models\Blog;
-use wdmg\blog\models\BlogSearch;
+use wdmg\blog\models\Posts;
+use wdmg\blog\models\PostsSearch;
 
 /**
  * PostsController implements the CRUD actions for Blog model.
@@ -65,7 +65,7 @@ class PostsController extends Controller
      */
     public function actionIndex()
     {
-        $searchModel = new BlogSearch();
+        $searchModel = new PostsSearch();
 
         if ($cat_id = Yii::$app->request->get('cat_id', null))
             $searchModel->categories = intval($cat_id);
@@ -84,13 +84,13 @@ class PostsController extends Controller
 
 
     /**
-     * Creates a new Blog post model.
+     * Creates a new Posts post model.
      * If creation is successful, the browser will be redirected to the list of pages.
      * @return mixed
      */
     public function actionCreate()
     {
-        $model = new Blog();
+        $model = new Posts();
         $model->status = $model::POST_STATUS_DRAFT;
 
         // Autocomplete for tags list
@@ -297,7 +297,7 @@ class PostsController extends Controller
      */
     protected function findModel($id)
     {
-        if (($model = Blog::findOne($id)) !== null) {
+        if (($model = Posts::findOne($id)) !== null) {
             return $model;
         }
 

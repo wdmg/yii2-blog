@@ -6,12 +6,13 @@ use Yii;
 use yii\base\Model;
 use yii\data\ActiveDataProvider;
 use wdmg\validators\JsonValidator;
-use wdmg\blog\models\Blog;
+use wdmg\blog\models\Posts;
+use wdmg\blog\models\Taxonomy;
 
 /**
- * BlogSearch represents the model behind the search form of `wdmg\blog\models\Blog`.
+ * PostsSearch represents the model behind the search form of `wdmg\blog\models\Posts`.
  */
-class BlogSearch extends Blog
+class PostsSearch extends Posts
 {
     /**
      * {@inheritdoc}
@@ -42,7 +43,7 @@ class BlogSearch extends Blog
      */
     public function search($params)
     {
-        $query = Blog::find()->alias('blog');
+        $query = Posts::find()->alias('posts');
 
         // add conditions that should always apply here
         $dataProvider = new ActiveDataProvider([
@@ -85,17 +86,17 @@ class BlogSearch extends Blog
             $query->andFilterWhere(['like', 'status', $this->status]);
 
         if (intval($this->categories) !== 0) {
-            $query->leftJoin(['taxonomy_cats' => Taxonomy::tableName()], '`taxonomy_cats`.`post_id` = `blog`.`id`');
+            $query->leftJoin(['taxonomy_cats' => Taxonomy::tableName()], '`taxonomy_cats`.`post_id` = `posts`.`id`');
             $query->andFilterWhere([
-                'taxonomy_cats.type' => Blog::TAXONOMY_CATEGORIES,
+                'taxonomy_cats.type' => Posts::TAXONOMY_CATEGORIES,
                 'taxonomy_cats.taxonomy_id' => intval($this->categories)
             ]);
         }
 
         if (intval($this->tags) !== 0) {
-            $query->leftJoin(['taxonomy_tags' => Taxonomy::tableName()], '`taxonomy_tags`.`post_id` = `blog`.`id`');
+            $query->leftJoin(['taxonomy_tags' => Taxonomy::tableName()], '`taxonomy_tags`.`post_id` = `posts`.`id`');
             $query->andFilterWhere([
-                'taxonomy_tags.type' => Blog::TAXONOMY_TAGS,
+                'taxonomy_tags.type' => Posts::TAXONOMY_TAGS,
                 'taxonomy_tags.taxonomy_id' => intval($this->tags)
             ]);
         }

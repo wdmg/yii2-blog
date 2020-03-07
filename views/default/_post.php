@@ -3,7 +3,7 @@ use yii\helpers\Html;
 use yii\helpers\HtmlPurifier;
 
 /* @var $this yii\web\View */
-/* @var $model wdmg\blog\models\Blog */
+/* @var $model wdmg\blog\models\Posts */
 
 ?>
 <div class="post">

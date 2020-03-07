@@ -2,6 +2,7 @@ Changelog
 =========
 
 ## 1.1.1 (2020-03-07)
+ * Rename models, added default category, refactoring migrations
  * Filter posts by categories and tags (view dashboard)
  * Compact indicators for support modules
  

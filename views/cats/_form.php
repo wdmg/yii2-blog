@@ -7,7 +7,7 @@ use wdmg\widgets\Editor;
 use wdmg\widgets\SelectInput;
 
 /* @var $this yii\web\View */
-/* @var $model wdmg\blog\models\Blog */
+/* @var $model wdmg\blog\models\Posts */
 /* @var $form yii\widgets\ActiveForm */
 ?>
 
