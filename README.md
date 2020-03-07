@@ -1,6 +1,6 @@
 [![Yii2](https://img.shields.io/badge/required-Yii2_v2.0.20-blue.svg)](https://packagist.org/packages/yiisoft/yii2)
 [![Github all releases](https://img.shields.io/github/downloads/wdmg/yii2-blog/total.svg)](https://GitHub.com/wdmg/yii2-blog/releases/)
-![Progress](https://img.shields.io/badge/progress-in_development-red.svg)
+![Progress](https://img.shields.io/badge/progress-ready_to_use-green.svg)
 [![GitHub license](https://img.shields.io/github/license/wdmg/yii2-blog.svg)](https://github.com/wdmg/yii2-blog/blob/master/LICENSE)
 ![GitHub release](https://img.shields.io/github/release/wdmg/yii2-blog/all.svg)
 
@@ -63,7 +63,7 @@ Use the `Module::dashboardNavItems()` method of the module to generate a navigat
         ]);
     ?>
 
-# Status and version [in progress development]
+# Status and version [ready to use]
 * v.1.1.1 -  Filter posts by categories and tags (view dashboard)
 * v.1.1.0 -  Added CRUD for taxonomy (Categories, Tags)
 * v.1.0.1 -  Added migrations, CRUD and models for Categories, Tags
