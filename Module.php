@@ -104,17 +104,17 @@ class Module extends BaseModule
                 [
                     'label' => Yii::t('app/modules/blog', 'All posts'),
                     'url' => [$this->routePrefix . '/blog/posts/'],
-                    'active' => (in_array(\Yii::$app->controller->module->id, ['content']) &&  Yii::$app->controller->id == 'blocks'),
+                    'active' => (in_array(\Yii::$app->controller->module->id, ['content']) &&  Yii::$app->controller->id == 'posts'),
                 ],
                 [
                     'label' => Yii::t('app/modules/blog', 'Categories'),
                     'url' => [$this->routePrefix . '/blog/cats/'],
-                    'active' => (in_array(\Yii::$app->controller->module->id, ['content']) &&  Yii::$app->controller->id == 'lists'),
+                    'active' => (in_array(\Yii::$app->controller->module->id, ['content']) &&  Yii::$app->controller->id == 'cats'),
                 ],
                 [
                     'label' => Yii::t('app/modules/blog', 'Tags list'),
                     'url' => [$this->routePrefix . '/blog/tags/'],
-                    'active' => (in_array(\Yii::$app->controller->module->id, ['content']) &&  Yii::$app->controller->id == 'lists'),
+                    'active' => (in_array(\Yii::$app->controller->module->id, ['content']) &&  Yii::$app->controller->id == 'tags'),
                 ]
             ]
         ];
