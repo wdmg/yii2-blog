@@ -8,7 +8,7 @@ use yii\widgets\DetailView;
 /* @var $model wdmg\blog\models\Posts */
 
 $this->title = Yii::t('app/modules/blog', 'View blog post');
-$this->params['breadcrumbs'][] = ['label' => $this->context->module->name, 'url' => ['posts/index']];
+$this->params['breadcrumbs'][] = ['label' => Yii::t('app/modules/blog', 'All posts'), 'url' => ['posts/index']];
 $this->params['breadcrumbs'][] = $this->title;
 ?>
 <div class="page-header">

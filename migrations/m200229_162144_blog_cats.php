@@ -68,6 +68,7 @@ class m200229_162144_blog_cats extends Migration
 
         $this->insert('{{%blog_cats}}', [
             'id' => 1,
+            'parent_id' => 0,
             'name' => 'Uncategorized',
             'alias' => 'uncategorized',
             'title' => 'Uncategorized posts'

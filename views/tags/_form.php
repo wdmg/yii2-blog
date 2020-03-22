@@ -58,8 +58,8 @@ $(document).ready(function() {
                 }
             ).done(function(data) {
                 if (data.alias && form.find('#blog-alias').val().length == 0) {
-                    form.find('#blog-alias').val(data.alias);
-                    form.yiiActiveForm('validateAttribute', 'blog-alias');
+                    form.find('#tags-alias').val(data.alias);
+                    form.yiiActiveForm('validateAttribute', 'tags-alias');
                 }
             }).fail(function () {
                 /*form.find('#options-type').val("");

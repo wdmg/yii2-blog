@@ -213,7 +213,12 @@ class CatsController extends Controller
     public function actionDelete($id)
     {
         $model = $this->findModel($id);
-        if($model->delete()) {
+
+        // Category for uncategorized posts has undeleted
+        if ($model->id === $model::DEFAULT_CATEGORY_ID)
+            return $this->redirect(['index']);
+
+        if ($model->delete()) {
             Yii::$app->getSession()->setFlash(
                 'success',
                 Yii::t(

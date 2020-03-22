@@ -3,11 +3,10 @@
 use yii\helpers\Html;
 use yii\helpers\Url;
 use yii\widgets\ActiveForm;
-use wdmg\widgets\Editor;
 use wdmg\widgets\SelectInput;
 
 /* @var $this yii\web\View */
-/* @var $model wdmg\blog\models\Posts */
+/* @var $model wdmg\blog\models\Categories */
 /* @var $form yii\widgets\ActiveForm */
 ?>
 
@@ -64,8 +63,8 @@ $(document).ready(function() {
                 }
             ).done(function(data) {
                 if (data.alias && form.find('#blog-alias').val().length == 0) {
-                    form.find('#blog-alias').val(data.alias);
-                    form.yiiActiveForm('validateAttribute', 'blog-alias');
+                    form.find('#categories-alias').val(data.alias);
+                    form.yiiActiveForm('validateAttribute', 'categories-alias');
                 }
             }).fail(function () {
                 /*form.find('#options-type').val("");

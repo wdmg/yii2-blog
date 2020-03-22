@@ -89,7 +89,7 @@ class m200229_131724_blog_posts extends Migration
         $this->dropIndex('{{%idx-blog-posts-status}}', '{{%blog_posts}}');
         $this->dropIndex('{{%idx-blog-posts-content}}', '{{%blog_posts}}');
 
-        if(class_exists('\wdmg\users\models\Users')) {
+        if (class_exists('\wdmg\users\models\Users')) {
             $this->dropIndex('{{%idx-blog-posts-created}}', '{{%blog_posts}}');
             $this->dropIndex('{{%idx-blog-posts-updated}}', '{{%blog_posts}}');
             $userTable = \wdmg\users\models\Users::tableName();

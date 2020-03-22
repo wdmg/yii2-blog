@@ -34,6 +34,8 @@ class Categories extends ActiveRecord
     public $route;
     public $url;
 
+    const DEFAULT_CATEGORY_ID = 1;
+
     /**
      * {@inheritdoc}
      */
@@ -132,7 +134,8 @@ class Categories extends ActiveRecord
 
     public function beforeDelete()
     {
-        if ($data->id === 1) // Category for uncategorized posts (undeleted).
+        // Category for uncategorized posts has undeleted
+        if ($data->id === self::DEFAULT_CATEGORY_ID)
             return false;
 
         return parent::beforeDelete();
@@ -197,21 +200,21 @@ class Categories extends ActiveRecord
                 ->andWhere(['!=', 'categories.id', $this->id])
                 ->select(['id', 'name']);
 
-            $pages = $query->asArray()->all();
+            $list = $query->asArray()->all();
         } else {
-            $pages = self::find()->select(['id', 'name'])->asArray()->all();
+            $list = self::find()->select(['id', 'name'])->asArray()->all();
         }
 
         if ($allLabel)
             return ArrayHelper::merge([
                 '*' => Yii::t('app/modules/blog', '-- All categories --')
-            ], ArrayHelper::map($pages, 'id', 'name'));
+            ], ArrayHelper::map($list, 'id', 'name'));
         elseif ($rootLabel)
             return ArrayHelper::merge([
                 0 => Yii::t('app/modules/blog', '-- Root category --')
-            ], ArrayHelper::map($pages, 'id', 'name'));
+            ], ArrayHelper::map($list, 'id', 'name'));
         else
-            return ArrayHelper::map($pages, 'id', 'name');
+            return ArrayHelper::map($list, 'id', 'name');
     }
 
     /**

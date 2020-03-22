@@ -120,7 +120,7 @@ $this->params['breadcrumbs'][] = $this->title;
                 ],
                 'visibleButtons' => [
                     'delete' => function ($data) {
-                        return !($data->id === 1); // Category for uncategorized posts (undeleted).
+                        return !($data->id === $data::DEFAULT_CATEGORY_ID); // Category for uncategorized posts has undeleted
                     },
                 ]
             ]

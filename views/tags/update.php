@@ -1,5 +1,6 @@
 <?php
 
+use wdmg\helpers\StringHelper;
 use yii\helpers\Html;
 
 /* @var $this yii\web\View */
@@ -10,6 +11,7 @@ $this->title = Yii::t('app/modules/blog', 'Updating tag: {name}', [
 ]);
 $this->params['breadcrumbs'][] = ['label' => Yii::t('app/modules/blog', 'Blog'), 'url' => ['list/index']];
 $this->params['breadcrumbs'][] = ['label' => Yii::t('app/modules/blog', 'All tags'), 'url' => ['tags/index']];
+$this->params['breadcrumbs'][] = ['label' => StringHelper::stringShorter($model->name, 64), 'url' => ['tags/view', 'id' => $model->id]];
 $this->params['breadcrumbs'][] = Yii::t('app/modules/blog', 'Edit');
 
 
