@@ -639,7 +639,7 @@ class Posts extends ActiveRecord
         if (is_countable($data)) {
             foreach ($data as $key => $tag) {
                 // Тег уже есть в базе данных, нужно лишь получить его ИД
-                if (preg_match('/tag_id:(\d)/', $key, $matches)) {
+                if (preg_match('/tag_id:(\d+)/', $key, $matches)) {
                     if ($tag_id = $matches[1]) {
                         $tags_ids[] = intval($tag_id);
                         if (is_array($existing_tags_ids)) {
