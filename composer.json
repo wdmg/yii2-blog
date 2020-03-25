@@ -21,7 +21,7 @@
     }
   ],
   "require": {
-    "yiisoft/yii2": "^2.0.20",
+    "yiisoft/yii2": "^2.0.33",
     "wdmg/yii2-base": "^1.1.6",
     "wdmg/yii2-selectinput": "^1.0.7",
     "wdmg/yii2-tagsinput": "^1.0.2",
