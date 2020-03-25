@@ -1,6 +1,10 @@
 Changelog
 =========
 
+## 1.1.3 (2020-03-25)
+ * Added pagination
+ * Up to date dependencies
+ 
 ## 1.1.2 (2020-03-23)
  * Parsing tag ID tag fixed
  * Added default sort and fix breadcrumbs

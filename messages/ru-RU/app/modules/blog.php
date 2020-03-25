@@ -61,6 +61,11 @@ return [
     'Add new post' => "Добавить публикацию",
     'Uncategorized' => "Без категории",
 
+    'First page' => 'Первая страница',
+    'Last page' => 'Последняя страница',
+    '&larr; Prev page' => '&larr; Предыдущая страница',
+    'Next page &rarr;' => 'Следующая страница &rarr;',
+
     'Updating tag: {name}' => "Редактирование тега: {name}",
     'Tag URL' => "URL тега",
 

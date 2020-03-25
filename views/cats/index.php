@@ -124,7 +124,22 @@ $this->params['breadcrumbs'][] = $this->title;
                     },
                 ]
             ]
-        ]
+        ],
+        'pager' => [
+            'options' => [
+                'class' => 'pagination',
+            ],
+            'maxButtonCount' => 5,
+            'activePageCssClass' => 'active',
+            'prevPageCssClass' => '',
+            'nextPageCssClass' => '',
+            'firstPageCssClass' => 'previous',
+            'lastPageCssClass' => 'next',
+            'firstPageLabel' => Yii::t('app/modules/blog', 'First page'),
+            'lastPageLabel'  => Yii::t('app/modules/blog', 'Last page'),
+            'prevPageLabel'  => Yii::t('app/modules/blog', '&larr; Prev page'),
+            'nextPageLabel'  => Yii::t('app/modules/blog', 'Next page &rarr;')
+        ],
     ]); ?>
     <hr/>
     <div>
