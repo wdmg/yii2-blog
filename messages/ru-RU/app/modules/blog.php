@@ -25,7 +25,6 @@ return [
     'All statuses' => "Все статусы",
     'Draft' => "Черновик",
     'Published' => "Опубликовано",
-    'Add new post' => "Добавить публикацию",
     '&larr; Back to list' => "&larr; Назад к списку",
     'Save' => "Сохранить",
     'Post URL' => "URL-адрес публикации",
@@ -89,12 +88,13 @@ return [
     'An error occurred while deleting a tag `{name}`.' => "Произошла ошбка при обновлении поста.",
     'The requested tag does not exist.' => "Запрошенный тег не существует.",
 
-    'Blog post has been successfully added!' => "Публикация была успешно добавлена!",
+    'Blog post has been successfully added!' => "Публикация успешно добавлена!",
+    'OK! Blog post `Тестовая публикация` successfully updated.' => "Публикация успешно добавлена!",
     'An error occurred while add the new post.' => "Произошла ошбка при добавлении новой публикации.",
-    'OK! Blog item `{name}` successfully updated.' => "OK! Публикация была успешно обновлена.",
-    'An error occurred while update a blog item `{name}`.' => "Произошла ошбка при обновлении публикации `{name}`.",
-    'OK! Blog item `{name}` successfully deleted.' => "OK! Публикация была успешно удалена.",
-    'An error occurred while deleting a blog item `{name}`.' => "Произошла ошбка при удалении публикации `{name}`.",
+    'OK! Blog post `{name}` successfully updated.' => "OK! Публикация была успешно обновлена.",
+    'An error occurred while update a blog post `{name}`.' => "Произошла ошбка при обновлении публикации `{name}`.",
+    'OK! Blog post `{name}` successfully deleted.' => "OK! Публикация была успешно удалена.",
+    'An error occurred while deleting a blog post `{name}`.' => "Произошла ошбка при удалении публикации `{name}`.",
     'The requested blog post does not exist.' => "Запрошенная публикация не существует.",
 
     'default' => "по-умолчанию",
@@ -111,9 +111,6 @@ return [
     'Google AMP' => "Google AMP",
     'Google AMP?' => "Google AMP?",
     '- display in the AMP pages' => "- отображать в AMP страницах",
-
-    'Blog post has been successfully added!' => "Публикация успешно добавлена!",
-    'OK! Blog item `Тестовая публикация` successfully updated.' => "Публикация успешно добавлена!",
 
     'No posts available' => "Нет доступных для отображения публикаций",
     'An error occurred while retrieving the posts list' => "Произошла ошибка при получении списка публикаций",

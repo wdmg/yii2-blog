@@ -6,7 +6,7 @@ use yii\helpers\Html;
 /* @var $model wdmg\blog\models\Tags */
 
 $this->title = Yii::t('app/modules/blog', 'New tag');
-$this->params['breadcrumbs'][] = ['label' => Yii::t('app/modules/blog', 'Blog'), 'url' => ['list/index']];
+$this->params['breadcrumbs'][] = ['label' => Yii::t('app/modules/blog', 'Blog'), 'url' => ['posts/index']];
 $this->params['breadcrumbs'][] = ['label' => Yii::t('app/modules/blog', 'All tags'), 'url' => ['tags/index']];
 $this->params['breadcrumbs'][] = $this->title;
 ?>

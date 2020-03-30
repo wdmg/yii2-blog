@@ -6,7 +6,7 @@ use yii\helpers\Html;
 /* @var $model wdmg\blog\models\Categories */
 
 $this->title = Yii::t('app/modules/blog', 'New category');
-$this->params['breadcrumbs'][] = ['label' => Yii::t('app/modules/blog', 'Blog'), 'url' => ['list/index']];
+$this->params['breadcrumbs'][] = ['label' => Yii::t('app/modules/blog', 'Blog'), 'url' => ['posts/index']];
 $this->params['breadcrumbs'][] = ['label' => Yii::t('app/modules/blog', 'All categories'), 'url' => ['cats/index']];
 $this->params['breadcrumbs'][] = $this->title;
 ?>

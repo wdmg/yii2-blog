@@ -10,7 +10,7 @@ use wdmg\widgets\SelectInput;
 /* @var $model wdmg\blog\models\Categories */
 
 $this->title = Yii::t('app/modules/blog', 'All categories');
-$this->params['breadcrumbs'][] = ['label' => Yii::t('app/modules/blog', 'Blog'), 'url' => ['list/index']];
+$this->params['breadcrumbs'][] = ['label' => Yii::t('app/modules/blog', 'Blog'), 'url' => ['posts/index']];
 $this->params['breadcrumbs'][] = $this->title;
 
 ?>

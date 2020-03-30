@@ -1,6 +1,10 @@
 Changelog
 =========
 
+## 1.1.4 (2020-03-30)
+ * Log activity
+ * Routing fixed in breadcrumbs
+ 
 ## 1.1.3 (2020-03-25)
  * Added pagination
  * Up to date dependencies

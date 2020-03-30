@@ -28,7 +28,7 @@ class DefaultController extends Controller
     }
 
     /**
-     * View of blog item.
+     * View of blog post.
      *
      * @param string $blog aliases of searching blog.
      * @return mixed
@@ -50,7 +50,7 @@ class DefaultController extends Controller
     }
 
     /**
-     * View of blog item.
+     * View of blog post.
      *
      * @param string $blog aliases of searching blog.
      * @param boolean $draft flag of status searching blog.

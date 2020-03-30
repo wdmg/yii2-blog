@@ -9,7 +9,7 @@ use yii\helpers\Html;
 $this->title = Yii::t('app/modules/blog', 'Updating category: {name}', [
     'name' => $model->name,
 ]);
-$this->params['breadcrumbs'][] = ['label' => Yii::t('app/modules/blog', 'Blog'), 'url' => ['list/index']];
+$this->params['breadcrumbs'][] = ['label' => Yii::t('app/modules/blog', 'Blog'), 'url' => ['posts/index']];
 $this->params['breadcrumbs'][] = ['label' => Yii::t('app/modules/blog', 'All categories'), 'url' => ['cats/index']];
 $this->params['breadcrumbs'][] = ['label' => StringHelper::stringShorter($model->name, 64), 'url' => ['cats/view', 'id' => $model->id]];
 $this->params['breadcrumbs'][] = Yii::t('app/modules/blog', 'Edit');

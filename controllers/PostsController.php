@@ -167,7 +167,7 @@ class PostsController extends Controller
             return $this->asJson($response);
         }
 
-        // Get current URL before save this blog item
+        // Get current URL before save this blog post
         $oldPostUrl = $model->getPostUrl(false);
 
         if (Yii::$app->request->isAjax) {
@@ -182,7 +182,7 @@ class PostsController extends Controller
         } else {
             if ($model->load(Yii::$app->request->post())) {
 
-                // Get new URL for saved blog item
+                // Get new URL for saved blog post
                 $newPostUrl = $model->getPostUrl(false);
 
                 // Get image thumbnail
@@ -199,22 +199,49 @@ class PostsController extends Controller
                         Yii::$app->redirects->set('blog', $oldPostUrl, $newPostUrl, 301);
                     }
 
+                    // Log activity
+                    if (
+                        class_exists('\wdmg\activity\models\Activity') &&
+                        $this->module->moduleLoaded('activity') &&
+                        isset(Yii::$app->activity)
+                    ) {
+                        Yii::$app->activity->set(
+                            'Blog post `' . $model->name . '` with ID `' . $model->id . '` has been successfully updated.',
+                            $this->uniqueId . ":" . $this->action->id,
+                            'success',
+                            1
+                        );
+                    }
+
                     Yii::$app->getSession()->setFlash(
                         'success',
                         Yii::t(
                             'app/modules/blog',
-                            'OK! Blog item `{name}` successfully updated.',
+                            'OK! Blog post `{name}` successfully updated.',
                             [
                                 'name' => $model->name
                             ]
                         )
                     );
                 } else {
+                    // Log activity
+                    if (
+                        class_exists('\wdmg\activity\models\Activity') &&
+                        $this->module->moduleLoaded('activity') &&
+                        isset(Yii::$app->activity)
+                    ) {
+                        Yii::$app->activity->set(
+                            'An error occurred while update the blog post  `' . $model->name . '` with ID `' . $model->id . '`.',
+                            $this->uniqueId . ":" . $this->action->id,
+                            'danger',
+                            1
+                        );
+                    }
                     Yii::$app->getSession()->setFlash(
                         'danger',
                         Yii::t(
                             'app/modules/blog',
-                            'An error occurred while update a blog item `{name}`.',
+                            'An error occurred while update a blog post `{name}`.',
                             [
                                 'name' => $model->name
                             ]
@@ -261,22 +288,51 @@ class PostsController extends Controller
 
             // @TODO: remove redirects of deleted pages
 
+            // Log activity
+            if (
+                class_exists('\wdmg\activity\models\Activity') &&
+                $this->module->moduleLoaded('activity') &&
+                isset(Yii::$app->activity)
+            ) {
+                Yii::$app->activity->set(
+                    'Blog post `' . $model->name . '` with ID `' . $model->id . '` has been successfully deleted.',
+                    $this->uniqueId . ":" . $this->action->id,
+                    'success',
+                    1
+                );
+            }
+
             Yii::$app->getSession()->setFlash(
                 'success',
                 Yii::t(
                     'app/modules/blog',
-                    'OK! Blog item `{name}` successfully deleted.',
+                    'OK! Blog post `{name}` successfully deleted.',
                     [
                         'name' => $model->name
                     ]
                 )
             );
         } else {
+
+            // Log activity
+            if (
+                class_exists('\wdmg\activity\models\Activity') &&
+                $this->module->moduleLoaded('activity') &&
+                isset(Yii::$app->activity)
+            ) {
+                Yii::$app->activity->set(
+                    'An error occurred while deleting the blog post  `' . $model->name . '` with ID `' . $model->id . '`.',
+                    $this->uniqueId . ":" . $this->action->id,
+                    'danger',
+                    1
+                );
+            }
+
             Yii::$app->getSession()->setFlash(
                 'danger',
                 Yii::t(
                     'app/modules/blog',
-                    'An error occurred while deleting a blog item `{name}`.',
+                    'An error occurred while deleting a blog post `{name}`.',
                     [
                         'name' => $model->name
                     ]

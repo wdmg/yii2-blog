@@ -64,6 +64,7 @@ Use the `Module::dashboardNavItems()` method of the module to generate a navigat
     ?>
 
 # Status and version [ready to use]
+* v.1.1.4 - Log activity
 * v.1.1.3 - Added pagination
 * v.1.1.2 - Added default sort and fix breadcrumbs
 * v.1.1.1 - Filter posts by categories and tags (view dashboard)

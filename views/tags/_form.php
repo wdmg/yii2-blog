@@ -9,6 +9,7 @@ use wdmg\widgets\SelectInput;
 /* @var $this yii\web\View */
 /* @var $model wdmg\blog\models\Posts */
 /* @var $form yii\widgets\ActiveForm */
+
 ?>
 
     <div class="blog-form">
