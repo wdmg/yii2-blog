@@ -102,7 +102,7 @@ $this->params['breadcrumbs'][] = $this->title;
                     'attribute' => 'categories',
                     'items' => $searchModel->getAllCategoriesList(true),
                     'options' => [
-                        'id' => 'blogsearch-categories',
+                        'id' => 'posts-list-categories',
                         'class' => 'form-control'
                     ]
                 ]),
@@ -132,7 +132,7 @@ $this->params['breadcrumbs'][] = $this->title;
                     'attribute' => 'tags',
                     'items' => $searchModel->getAllTagsList(true),
                     'options' => [
-                        'id' => 'blogsearch-tags',
+                        'id' => 'posts-list-tags',
                         'class' => 'form-control'
                     ]
                 ]),
@@ -198,6 +198,7 @@ $this->params['breadcrumbs'][] = $this->title;
                     'attribute' => 'status',
                     'items' => $searchModel->getStatusesList(true),
                     'options' => [
+                        'id' => 'posts-list-status',
                         'class' => 'form-control'
                     ]
                 ]),

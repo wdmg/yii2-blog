@@ -37,7 +37,9 @@ use wdmg\widgets\SelectInput;
         <?= $form->field($model, 'alias')->textInput(['maxlength' => true]) ?>
         <?= $form->field($model, 'excerpt')->textarea(['rows' => 3]) ?>
         <?= $form->field($model, 'content')->widget(Editor::class, [
-            'options' => [],
+            'options' => [
+                'id' => 'posts-form-content',
+            ],
             'pluginOptions' => []
         ]) ?>
 
@@ -73,7 +75,9 @@ use wdmg\widgets\SelectInput;
 
         <?= $form->field($model, 'tags')->widget(TagsInput::class, [
             'options' => [
-                'class' => 'form-control'
+                'id' => 'posts-form-tags',
+                'class' => 'form-control',
+                'placeholder' => Yii::t('app/modules/blog', 'Type tags...')
             ],
             'pluginOptions' => [
                 'autocomplete' => Yii::$app->request->absoluteUrl,
@@ -81,7 +85,7 @@ use wdmg\widgets\SelectInput;
                 'minInput' => 2,
                 'maxTags' => 100
             ]
-        ])->input('text', ['placeholder' => Yii::t('app/modules/blog', 'Type tags...')]); ?>
+        ]); ?>
 
         <?= $form->field($model, 'in_sitemap', [
             'template' => "{label}\n<br/>{input}\n{hint}\n{error}"
@@ -103,6 +107,7 @@ use wdmg\widgets\SelectInput;
         <?= $form->field($model, 'status')->widget(SelectInput::class, [
             'items' => $statusModes,
             'options' => [
+                'id' => 'posts-form-status',
                 'class' => 'form-control'
             ]
         ]); ?>
