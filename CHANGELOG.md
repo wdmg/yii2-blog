@@ -1,7 +1,8 @@
 Changelog
 =========
 
-## 1.1.4 (2020-03-30)
+## 1.1.4 (2020-03-31)
+ * Refactoring log of activity
  * Log activity
  * Routing fixed in breadcrumbs
  
