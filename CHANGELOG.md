@@ -1,6 +1,10 @@
 Changelog
 =========
 
+## 1.1.*
+ * Start of multi-language support
+ * Fixed migrations
+
 ## 1.1.4 (2020-03-31)
  * Refactoring log of activity
  * Log activity

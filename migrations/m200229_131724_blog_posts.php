@@ -40,8 +40,6 @@ class m200229_131724_blog_posts extends Migration
 
             'status' => $this->tinyInteger(1)->null()->defaultValue(0),
 
-            'source' => $this->string(255)->null(),
-
             'created_at' => $this->dateTime()->defaultExpression('CURRENT_TIMESTAMP'),
             'created_by' => $this->integer(11)->null(),
             'updated_at' => $this->datetime()->defaultExpression('CURRENT_TIMESTAMP'),
