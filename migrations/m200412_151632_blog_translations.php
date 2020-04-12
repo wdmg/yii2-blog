@@ -12,6 +12,10 @@ class m200412_151632_blog_translations extends Migration
      */
     public function safeUp()
     {
+        $defaultLocale = null;
+        if (isset(Yii::$app->sourceLanguage))
+            $defaultLocale = Yii::$app->sourceLanguage;
+
         if (is_null($this->getDb()->getSchema()->getTableSchema('{{%blog_posts}}')->getColumn('source_id'))) {
             $this->addColumn('{{%blog_posts}}', 'source_id', $this->bigInteger()->null()->after('id'));
 
@@ -29,7 +33,7 @@ class m200412_151632_blog_translations extends Migration
 
         }
         if (is_null($this->getDb()->getSchema()->getTableSchema('{{%blog_posts}}')->getColumn('locale'))) {
-            $this->addColumn('{{%blog_posts}}', 'locale', $this->string(10)->after('status'));
+            $this->addColumn('{{%blog_posts}}', 'locale', $this->string(10)->defaultValue($defaultLocale)->after('status'));
             $this->createIndex('{{%idx-blog-posts-locale}}', '{{%blog_posts}}', ['locale']);
 
             // If module `Translations` exist setup foreign key `locale` to `trans_langs.locale`
@@ -64,7 +68,7 @@ class m200412_151632_blog_translations extends Migration
 
         }
         if (is_null($this->getDb()->getSchema()->getTableSchema('{{%blog_cats}}')->getColumn('locale'))) {
-            $this->addColumn('{{%blog_cats}}', 'locale', $this->string(10)->after('keywords'));
+            $this->addColumn('{{%blog_cats}}', 'locale', $this->string(10)->defaultValue($defaultLocale)->after('keywords'));
             $this->createIndex('{{%idx-blog-cats-locale}}', '{{%blog_cats}}', ['locale']);
 
             // If module `Translations` exist setup foreign key `locale` to `trans_langs.locale`
@@ -99,7 +103,7 @@ class m200412_151632_blog_translations extends Migration
 
         }
         if (is_null($this->getDb()->getSchema()->getTableSchema('{{%blog_tags}}')->getColumn('locale'))) {
-            $this->addColumn('{{%blog_tags}}', 'locale', $this->string(10)->after('keywords'));
+            $this->addColumn('{{%blog_tags}}', 'locale', $this->string(10)->defaultValue($defaultLocale)->after('keywords'));
             $this->createIndex('{{%idx-blog-tags-locale}}', '{{%blog_tags}}', ['locale']);
 
             // If module `Translations` exist setup foreign key `locale` to `trans_langs.locale`
