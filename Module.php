@@ -155,6 +155,12 @@ class Module extends BaseModule
                 $blogRoute . '/<alias:[\w-]+>' => 'admin/blog/default/view',
             ], true);
         }
+
+        // Add routes to blog posts in frontend
+        /*$app->getUrlManager()->addRules([
+            '/<lang:\w+>/<module:blog>/<alias:[\w-]+>' => 'admin/blog/default/view',
+            '/<module:blog>/<alias:[\w-]+>' => 'admin/blog/default/view',
+        ], true);*/
     }
 
 

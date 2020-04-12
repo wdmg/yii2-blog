@@ -52,7 +52,11 @@ class m200229_131724_blog_posts extends Migration
 
         $this->createIndex('{{%idx-blog-posts-alias}}', '{{%blog_posts}}', ['name', 'alias']);
         $this->createIndex('{{%idx-blog-posts-status}}', '{{%blog_posts}}', ['alias', 'status']);
-        $this->createIndex('{{%idx-blog-posts-content}}','{{%blog_posts}}', ['name', 'excerpt', 'content(250)'],false);
+
+        if ($this->db->driverName === 'mysql')
+            $this->createIndex('{{%idx-blog-posts-content}}','{{%blog_posts}}', ['name', 'excerpt', 'content(250)'],false);
+        else
+            $this->createIndex('{{%idx-blog-posts-content}}','{{%blog_posts}}', ['name', 'excerpt', 'content'],false);
 
         // If exist module `Users` set foreign key `created_by`, `updated_by` to `users.id`
         if (class_exists('\wdmg\users\models\Users')) {
