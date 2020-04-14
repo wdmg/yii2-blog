@@ -4,7 +4,8 @@ namespace wdmg\blog\models;
 
 use Yii;
 use yii\db\Expression;
-use yii\db\ActiveRecord;
+//use yii\db\ActiveRecord;
+use wdmg\base\models\ActiveRecordML;
 use yii\helpers\ArrayHelper;
 use yii\helpers\Json;
 use yii\base\InvalidArgumentException;
@@ -28,14 +29,32 @@ use yii\behaviors\SluggableBehavior;
  * @property integer $updated_by
  */
 
-class Categories extends ActiveRecord
+class Categories extends ActiveRecordML
 {
 
+    public $baseRoute;
     public $route;
     public $url;
 
     const DEFAULT_CATEGORY_ID = 1;
 
+    /**
+     * {@inheritdoc}
+     */
+    public function init()
+    {
+        parent::init();
+
+        if (isset(Yii::$app->params["blog.catsRoute"])) {
+            $this->baseRoute = Yii::$app->params["blog.catsRoute"];
+        } else {
+
+            if (!$module = Yii::$app->getModule('admin/blog'))
+                $module = Yii::$app->getModule('blog');
+
+            $this->baseRoute = $module->catsRoute;
+        }
+    }
     /**
      * {@inheritdoc}
      */
@@ -47,7 +66,7 @@ class Categories extends ActiveRecord
     /**
      * {@inheritdoc}
      */
-    public function behaviors()
+    /*public function behaviors()
     {
         return [
             'timestamp' => [
@@ -75,14 +94,14 @@ class Categories extends ActiveRecord
                 }
             ],
         ];
-    }
+    }*/
 
     /**
      * {@inheritdoc}
      */
     public function rules()
     {
-        $rules = [
+        return ArrayHelper::merge([
             [['name', 'alias'], 'required'],
             [['parent_id'], 'integer'],
             [['name', 'alias'], 'string', 'min' => 3, 'max' => 128],
@@ -91,13 +110,7 @@ class Categories extends ActiveRecord
             ['alias', 'unique', 'message' => Yii::t('app/modules/blog', 'Param attribute must be unique.')],
             ['alias', 'match', 'pattern' => '/^[A-Za-z0-9\-\_]+$/', 'message' => Yii::t('app/modules/blog','It allowed only Latin alphabet, numbers and the «-», «_» characters.')],
             [['created_at', 'updated_at'], 'safe'],
-        ];
-
-        if (class_exists('\wdmg\users\models\Users')) {
-            $rules[] = [['created_by', 'updated_by'], 'safe'];
-        }
-
-        return $rules;
+        ], parent::rules());
     }
 
     /**
@@ -141,27 +154,6 @@ class Categories extends ActiveRecord
         return parent::beforeDelete();
     }
 
-    /**
-     * @return object of \yii\db\ActiveQuery
-     */
-    public function getCreatedBy()
-    {
-        if (class_exists('\wdmg\users\models\Users'))
-            return $this->hasOne(\wdmg\users\models\Users::class, ['id' => 'created_by']);
-        else
-            return $this->created_by;
-    }
-
-    /**
-     * @return object of \yii\db\ActiveQuery
-     */
-    public function getUpdatedBy()
-    {
-        if (class_exists('\wdmg\users\models\Users'))
-            return $this->hasOne(\wdmg\users\models\Users::class, ['id' => 'updated_by']);
-        else
-            return $this->updated_by;
-    }
 
     /**
      * Returns all blog categories
@@ -170,7 +162,7 @@ class Categories extends ActiveRecord
      * @param bool $asArray flag if necessary to return as an array
      * @return array|ActiveRecord|null
      */
-    public function getAll($cond = null, $asArray = false) {
+    /*public function getAll($cond = null, $asArray = false) {
         if (!is_null($cond))
             $models = self::find()->where($cond);
         else
@@ -181,7 +173,7 @@ class Categories extends ActiveRecord
         else
             return $models->all();
 
-    }
+    }*/
 
     /**
      * @param bool $allLabel
@@ -221,18 +213,18 @@ class Categories extends ActiveRecord
      * Return the public route for categories URL
      * @return string
      */
-    private function getRoute($route = null)
+    /*private function getRoute($route = null)
     {
 
         if (is_null($route)) {
-            if (isset(Yii::$app->params["blog.blogCategoriesRoute"])) {
-                $route = Yii::$app->params["blog.blogCategoriesRoute"];
+            if (isset(Yii::$app->params["blog.catsRoute"])) {
+                $route = Yii::$app->params["blog.catsRoute"];
             } else {
 
                 if (!$module = Yii::$app->getModule('admin/blog'))
                     $module = Yii::$app->getModule('blog');
 
-                $route = $module->blogCategoriesRoute;
+                $route = $module->catsRoute;
             }
         }
 
@@ -243,35 +235,21 @@ class Categories extends ActiveRecord
         }
 
         return $route;
-    }
+    }*/
 
-    /**
-     *
-     * @param $withScheme boolean, absolute or relative URL
-     * @return string or null
-     */
-    public function getCategoryUrl($withScheme = true, $realUrl = false)
-    {
-        $this->route = $this->getRoute();
-        if (isset($this->alias)) {
-            return \yii\helpers\Url::to($this->route . '/' .$this->alias, $withScheme);
-        } else {
-            return null;
-        }
-    }
 
     /**
      * Returns the URL to the view of the current blog category
      *
      * @return string
      */
-    public function getUrl()
+    /*public function getUrl()
     {
         if ($this->url === null)
             $this->url = $this->getCategoryUrl();
 
         return $this->url;
-    }
+    }*/
 
     /**
      * @return object of \yii\db\ActiveQuery
@@ -298,5 +276,21 @@ class Categories extends ActiveRecord
         else
             return $query->all();
 
+    }
+
+    /**
+     *
+     * @param $withScheme boolean, absolute or relative URL
+     * @return string or null
+     */
+    public function getCategoryUrl($withScheme = true, $realUrl = false)
+    {
+        /*$this->route = $this->getRoute();
+        if (isset($this->alias)) {
+            return \yii\helpers\Url::to($this->route . '/' .$this->alias, $withScheme);
+        } else {
+            return null;
+        }*/
+        return $this->getModelUrl($withScheme, $realUrl);
     }
 }

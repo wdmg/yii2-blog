@@ -2,9 +2,11 @@
 
 namespace wdmg\blog\models;
 
+use wdmg\validators\JsonValidator;
 use Yii;
 use yii\db\Expression;
-use yii\db\ActiveRecord;
+//use yii\db\ActiveRecord;
+use wdmg\base\models\ActiveRecordML;
 use yii\helpers\ArrayHelper;
 use yii\helpers\Json;
 use yii\base\InvalidArgumentException;
@@ -16,22 +18,43 @@ use yii\behaviors\SluggableBehavior;
  * This is the model class for table "{{%blog_tags}}".
  *
  * @property int $id
+ * @property int $source_id
  * @property string $name
  * @property string $alias
  * @property string $title
  * @property string $description
  * @property string $keywords
+ * @property string $locale
  * @property string $created_at
  * @property integer $created_by
  * @property string $updated_at
  * @property integer $updated_by
  */
 
-class Tags extends ActiveRecord
+class Tags extends ActiveRecordML
 {
 
+    public $baseRoute;
     public $route;
     public $url;
+
+    /**
+     * {@inheritdoc}
+     */
+    public function init()
+    {
+        parent::init();
+
+        if (isset(Yii::$app->params["blog.tagsRoute"])) {
+            $this->baseRoute = Yii::$app->params["blog.tagsRoute"];
+        } else {
+
+            if (!$module = Yii::$app->getModule('admin/blog'))
+                $module = Yii::$app->getModule('blog');
+
+            $this->baseRoute = $module->tagsRoute;
+        }
+    }
 
     /**
      * {@inheritdoc}
@@ -44,7 +67,7 @@ class Tags extends ActiveRecord
     /**
      * {@inheritdoc}
      */
-    public function behaviors()
+    /*public function behaviors()
     {
         return [
             'timestamp' => [
@@ -72,14 +95,14 @@ class Tags extends ActiveRecord
                 }
             ],
         ];
-    }
+    }*/
 
     /**
      * {@inheritdoc}
      */
     public function rules()
     {
-        $rules = [
+        return ArrayHelper::merge([
             [['name', 'alias'], 'required'],
             [['name', 'alias'], 'string', 'min' => 3, 'max' => 128],
             [['name', 'alias'], 'string', 'min' => 3, 'max' => 128],
@@ -87,13 +110,7 @@ class Tags extends ActiveRecord
             ['alias', 'unique', 'message' => Yii::t('app/modules/blog', 'Param attribute must be unique.')],
             ['alias', 'match', 'pattern' => '/^[A-Za-z0-9\-\_]+$/', 'message' => Yii::t('app/modules/blog','It allowed only Latin alphabet, numbers and the «-», «_» characters.')],
             [['created_at', 'updated_at'], 'safe'],
-        ];
-
-        if (class_exists('\wdmg\users\models\Users')) {
-            $rules[] = [['created_by', 'updated_by'], 'safe'];
-        }
-
-        return $rules;
+        ], parent::rules());
     }
 
     /**
@@ -103,11 +120,13 @@ class Tags extends ActiveRecord
     {
         return [
             'id' => Yii::t('app/modules/blog', 'ID'),
+            'source_id' => Yii::t('app/modules/blog', 'Source ID'),
             'name' => Yii::t('app/modules/blog', 'Name'),
             'alias' => Yii::t('app/modules/blog', 'Alias'),
             'title' => Yii::t('app/modules/blog', 'Title'),
             'description' => Yii::t('app/modules/blog', 'Description'),
             'keywords' => Yii::t('app/modules/blog', 'Keywords'),
+            'locale' => Yii::t('app/modules/blog', 'Locale'),
             'created_at' => Yii::t('app/modules/blog', 'Created at'),
             'created_by' => Yii::t('app/modules/blog', 'Created by'),
             'updated_at' => Yii::t('app/modules/blog', 'Updated at'),
@@ -128,35 +147,13 @@ class Tags extends ActiveRecord
     }
 
     /**
-     * @return object of \yii\db\ActiveQuery
-     */
-    public function getCreatedBy()
-    {
-        if (class_exists('\wdmg\users\models\Users'))
-            return $this->hasOne(\wdmg\users\models\Users::class, ['id' => 'created_by']);
-        else
-            return $this->created_by;
-    }
-
-    /**
-     * @return object of \yii\db\ActiveQuery
-     */
-    public function getUpdatedBy()
-    {
-        if (class_exists('\wdmg\users\models\Users'))
-            return $this->hasOne(\wdmg\users\models\Users::class, ['id' => 'updated_by']);
-        else
-            return $this->updated_by;
-    }
-
-    /**
      * Returns all blog tags
      *
      * @param null $cond sampling conditions
      * @param bool $asArray flag if necessary to return as an array
      * @return array|ActiveRecord|null
      */
-    public function getAll($cond = null, $asArray = false) {
+    /*public function getAll($cond = null, $asArray = false) {
         if (!is_null($cond))
             $models = self::find()->where($cond);
         else
@@ -167,26 +164,26 @@ class Tags extends ActiveRecord
         else
             return $models->all();
 
-    }
+    }*/
 
     /**
      * Return the public route for tags URL
      * @return string
      */
-    public function getRoute()
+    /*public function getRoute()
     {
-        if (isset(Yii::$app->params["blog.blogTagsRoute"])) {
-            $route = Yii::$app->params["blog.blogTagsRoute"];
+        if (isset(Yii::$app->params["blog.tagsRoute"])) {
+            $route = Yii::$app->params["blog.tagsRoute"];
         } else {
 
             if (!$module = Yii::$app->getModule('admin/blog'))
                 $module = Yii::$app->getModule('blog');
 
-            $route = $module->blogTagsRoute;
+            $route = $module->tagsRoute;
         }
 
         return $route;
-    }
+    }*/
 
     /**
      *
@@ -195,12 +192,13 @@ class Tags extends ActiveRecord
      */
     public function getTagUrl($withScheme = true, $realUrl = false)
     {
-        $this->route = $this->getRoute();
+        /*$this->route = $this->getRoute();
         if (isset($this->alias)) {
             return \yii\helpers\Url::to($this->route . '/' .$this->alias, $withScheme);
         } else {
             return null;
-        }
+        }*/
+        return $this->getModelUrl($withScheme, $realUrl);
     }
 
     /**
@@ -208,13 +206,13 @@ class Tags extends ActiveRecord
      *
      * @return string
      */
-    public function getUrl()
+    /*public function getUrl()
     {
         if ($this->url === null)
             $this->url = $this->getTagUrl();
 
         return $this->url;
-    }
+    }*/
 
 
     /**

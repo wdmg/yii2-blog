@@ -6,7 +6,7 @@ namespace wdmg\blog;
  * Yii2 Blog
  *
  * @category        Module
- * @version         1.1.4
+ * @version         1.2.0
  * @author          Alexsander Vyshnyvetskyy <alex.vyshnyvetskyy@gmail.com>
  * @link            https://github.com/wdmg/yii2-blog
  * @copyright       Copyright (c) 2019 - 2020 W.D.M.Group, Ukraine
@@ -46,7 +46,7 @@ class Module extends BaseModule
     /**
      * @var string the module version
      */
-    private $version = "1.1.4";
+    private $version = "1.2.0";
 
     /**
      * @var integer, priority of initialization
@@ -56,19 +56,25 @@ class Module extends BaseModule
     /**
      * @var string the default routes to render blog (use "/" - for root)
      */
-    public $blogRoute = "/blog";
-    public $blogCategoriesRoute = "/blog/categories";
-    public $blogTagsRoute = "/blog/tags";
+    public $baseRoute = "/blog";
+    public $catsRoute = "/blog/categories";
+    public $tagsRoute = "/blog/tags";
 
     /**
      * @var string, the default layout to render blog
      */
-    public $blogLayout = "@app/views/layouts/main";
+    public $baseLayout = "@app/views/layouts/main";
 
     /**
      * @var string, the default path to save blog thumbnails in @webroot
      */
-    public $blogImagePath = "/uploads/blog";
+    public $imagePath = "/uploads/blog";
+
+    /**
+     * @var array, the list of support locales for multi-language versions of posts.
+     * @note This variable will be override if you use the `wdmg\yii2-translations` module.
+     */
+    public $supportLocales = ['ru-RU', 'uk-UA', 'en-US'];
 
     /**
      * {@inheritdoc}
@@ -84,10 +90,10 @@ class Module extends BaseModule
         $this->setPriority($this->priority);
 
         // Process and normalize route for blog in frontend
-        $this->blogRoute = self::normalizeRoute($this->blogRoute);
+        $this->baseRoute = self::normalizeRoute($this->baseRoute);
 
         // Normalize path to image folder
-        $this->blogImagePath = \yii\helpers\FileHelper::normalizePath($this->blogImagePath);
+        $this->imagePath = \yii\helpers\FileHelper::normalizePath($this->imagePath);
     }
 
     /**
@@ -129,8 +135,8 @@ class Module extends BaseModule
         parent::bootstrap($app);
 
         // Add routes to blog in frontend
-        $blogRoute = $this->blogRoute;
-        if (empty($blogRoute) || $blogRoute == "/") {
+        $baseRoute = $this->baseRoute;
+        if (empty($baseRoute) || $baseRoute == "/") {
             $app->getUrlManager()->addRules([
                 [
                     'pattern' => '/<alias:[\w-]+>',
@@ -142,17 +148,17 @@ class Module extends BaseModule
         } else {
             $app->getUrlManager()->addRules([
                 [
-                    'pattern' => $blogRoute,
+                    'pattern' => $baseRoute,
                     'route' => 'admin/blog/default/index',
                     'suffix' => ''
                 ],
                 [
-                    'pattern' => $blogRoute . '/<alias:[\w-]+>',
+                    'pattern' => $baseRoute . '/<alias:[\w-]+>',
                     'route' => 'admin/blog/default/view',
                     'suffix' => ''
                 ],
-                $blogRoute => 'admin/blog/default/index',
-                $blogRoute . '/<alias:[\w-]+>' => 'admin/blog/default/view',
+                $baseRoute => 'admin/blog/default/index',
+                $baseRoute . '/<alias:[\w-]+>' => 'admin/blog/default/view',
             ], true);
         }
 
@@ -170,7 +176,7 @@ class Module extends BaseModule
     public function install()
     {
         parent::install();
-        $path = Yii::getAlias('@webroot') . $this->blogImagePath;
+        $path = Yii::getAlias('@webroot') . $this->imagePath;
         if (\yii\helpers\FileHelper::createDirectory($path, $mode = 0775, $recursive = true))
             return true;
         else
@@ -183,7 +189,7 @@ class Module extends BaseModule
     public function uninstall()
     {
         parent::uninstall();
-        $path = Yii::getAlias('@webroot') . $this->blogImagePath;
+        $path = Yii::getAlias('@webroot') . $this->imagePath;
         if (\yii\helpers\FileHelper::removeDirectory($path))
             return true;
         else

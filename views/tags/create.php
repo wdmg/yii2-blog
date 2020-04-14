@@ -16,6 +16,7 @@ $this->params['breadcrumbs'][] = $this->title;
 <div class="blog-tags-create">
     <?= $this->render('_form', [
         'module' => $module,
-        'model' => $model
+        'model' => $model,
+        'languagesList' => $model->getLanguagesList(false),
     ]); ?>
 </div>

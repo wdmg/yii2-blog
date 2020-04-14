@@ -17,6 +17,16 @@ class PostsController extends Controller
 {
 
     /**
+     * @var string|null Selected language (locale)
+     */
+    private $_locale;
+
+    /**
+     * @var string|null Selected id of source
+     */
+    private $_source_id;
+
+    /**
      * {@inheritdoc}
      */
     public function behaviors()
@@ -60,6 +70,16 @@ class PostsController extends Controller
     }
 
     /**
+     * {@inheritdoc}
+     */
+    public function beforeAction($action)
+    {
+        $this->_locale = Yii::$app->request->get('locale', null);
+        $this->_source_id = Yii::$app->request->get('source_id', null);
+        return parent::beforeAction($action);
+    }
+
+    /**
      * Lists of all Blog posts models.
      * @return mixed
      */
@@ -91,7 +111,40 @@ class PostsController extends Controller
     public function actionCreate()
     {
         $model = new Posts();
-        $model->status = $model::POST_STATUS_DRAFT;
+        $model->status = $model::STATUS_DRAFT;
+
+        // No language is set for this model, we will use the current user language
+        if (is_null($model->locale)) {
+            if (is_null($this->_locale)) {
+
+                $model->locale = Yii::$app->language;
+                if (!Yii::$app->request->isPost) {
+
+                    $languages = $model->getLanguagesList(false);
+                    Yii::$app->getSession()->setFlash(
+                        'danger',
+                        Yii::t(
+                            'app/modules/blog',
+                            'No display language has been set for this news post. When saving, the current user language will be selected: {language}',
+                            [
+                                'language' => (isset($languages[Yii::$app->language])) ? $languages[Yii::$app->language] : Yii::$app->language
+                            ]
+                        )
+                    );
+                }
+            } else {
+                $model->locale = $this->_locale;
+            }
+        }
+
+        if (!is_null($this->_source_id)) {
+            $model->source_id = $this->_source_id;
+            if ($source = $model::findOne(['id' => $this->_source_id])) {
+                if ($source->id) {
+                    $model->source_id = $source->id;
+                }
+            }
+        }
 
         // Autocomplete for tags list
         if (Yii::$app->request->isAjax && ($value = Yii::$app->request->get('value'))) {
@@ -155,6 +208,26 @@ class PostsController extends Controller
     {
         $model = $this->findModel($id);
 
+        // No language is set for this model, we will use the current user language
+        if (is_null($model->locale)) {
+
+            $model->locale = Yii::$app->language;
+            if (!Yii::$app->request->isPost) {
+
+                $languages = $model->getLanguagesList(false);
+                Yii::$app->getSession()->setFlash(
+                    'danger',
+                    Yii::t(
+                        'app/modules/blog',
+                        'No display language has been set for this news post. When saving, the current user language will be selected: {language}',
+                        [
+                            'language' => (isset($languages[Yii::$app->language])) ? $languages[Yii::$app->language] : Yii::$app->language
+                        ]
+                    )
+                );
+            }
+        }
+
         // Autocomplete for tags list
         if (Yii::$app->request->isAjax && ($value = Yii::$app->request->get('value'))) {
 
@@ -194,7 +267,7 @@ class PostsController extends Controller
                 if ($model->save()) {
 
                     // Set 301-redirect from old URL to new
-                    if (isset(Yii::$app->redirects) && ($oldPostUrl !== $newPostUrl) && ($model->status == $model::POST_STATUS_PUBLISHED)) {
+                    if (isset(Yii::$app->redirects) && ($oldPostUrl !== $newPostUrl) && ($model->status == $model::STATUS_PUBLISHED)) {
                         // @TODO: remove old redirects
                         Yii::$app->redirects->set('blog', $oldPostUrl, $newPostUrl, 301);
                     }
@@ -324,16 +397,39 @@ class PostsController extends Controller
     /**
      * Finds the Blog post model based on its primary key value.
      * If the model is not found, a 404 HTTP exception will be thrown.
+     *
      * @param integer $id
      * @return blog model item
      * @throws NotFoundHttpException if the model cannot be found
      */
     protected function findModel($id)
     {
-        if (($model = Posts::findOne($id)) !== null) {
+
+        if (is_null($this->_locale) && ($model = Posts::findOne($id)) !== null) {
             return $model;
+        } else {
+            if (($model = Posts::findOne(['source_id' => $id, 'locale' => $this->_locale])) !== null)
+                return $model;
         }
 
         throw new NotFoundHttpException(Yii::t('app/modules/blog', 'The requested blog post does not exist.'));
+    }
+
+    /**
+     * Return current locale for dashboard
+     *
+     * @return string|null
+     */
+    public function getLocale() {
+        return $this->_locale;
+    }
+
+    /**
+     * Return current Source ID for dashboard
+     *
+     * @return string|null
+     */
+    public function getSourceId() {
+        return $this->_source_id;
     }
 }

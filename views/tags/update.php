@@ -12,7 +12,7 @@ $this->title = Yii::t('app/modules/blog', 'Updating tag: {name}', [
 $this->params['breadcrumbs'][] = ['label' => Yii::t('app/modules/blog', 'Blog'), 'url' => ['posts/index']];
 $this->params['breadcrumbs'][] = ['label' => Yii::t('app/modules/blog', 'All tags'), 'url' => ['tags/index']];
 $this->params['breadcrumbs'][] = ['label' => StringHelper::stringShorter($model->name, 64), 'url' => ['tags/view', 'id' => $model->id]];
-$this->params['breadcrumbs'][] = Yii::t('app/modules/blog', 'Edit');
+$this->params['breadcrumbs'][] = Yii::t('app/modules/blog', 'Updating');
 
 
 ?>
@@ -22,6 +22,7 @@ $this->params['breadcrumbs'][] = Yii::t('app/modules/blog', 'Edit');
 <div class="blog-tags-update">
     <?= $this->render('_form', [
         'module' => $module,
-        'model' => $model
+        'model' => $model,
+        'languagesList' => $model->getLanguagesList(false),
     ]); ?>
 </div>

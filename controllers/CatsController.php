@@ -17,6 +17,16 @@ class CatsController extends Controller
 {
 
     /**
+     * @var string|null Selected language (locale)
+     */
+    private $_locale;
+
+    /**
+     * @var string|null Selected id of source
+     */
+    private $_source_id;
+
+    /**
      * {@inheritdoc}
      */
     public function behaviors()
@@ -60,6 +70,16 @@ class CatsController extends Controller
     }
 
     /**
+     * {@inheritdoc}
+     */
+    public function beforeAction($action)
+    {
+        $this->_locale = Yii::$app->request->get('locale', null);
+        $this->_source_id = Yii::$app->request->get('source_id', null);
+        return parent::beforeAction($action);
+    }
+
+    /**
      * Lists of all Categories models.
      * @return mixed
      */
@@ -84,6 +104,39 @@ class CatsController extends Controller
     public function actionCreate()
     {
         $model = new Categories();
+
+        // No language is set for this model, we will use the current user language
+        if (is_null($model->locale)) {
+            if (is_null($this->_locale)) {
+
+                $model->locale = Yii::$app->language;
+                if (!Yii::$app->request->isPost) {
+
+                    $languages = $model->getLanguagesList(false);
+                    Yii::$app->getSession()->setFlash(
+                        'danger',
+                        Yii::t(
+                            'app/modules/blog',
+                            'No display language has been set for this blog category. When saving, the current user language will be selected: {language}',
+                            [
+                                'language' => (isset($languages[Yii::$app->language])) ? $languages[Yii::$app->language] : Yii::$app->language
+                            ]
+                        )
+                    );
+                }
+            } else {
+                $model->locale = $this->_locale;
+            }
+        }
+
+        if (!is_null($this->_source_id)) {
+            $model->source_id = $this->_source_id;
+            if ($source = $model::findOne(['id' => $this->_source_id])) {
+                if ($source->id) {
+                    $model->source_id = $source->id;
+                }
+            }
+        }
 
         if (Yii::$app->request->isAjax) {
             if ($model->load(Yii::$app->request->post())) {
@@ -148,6 +201,26 @@ class CatsController extends Controller
     public function actionUpdate($id)
     {
         $model = $this->findModel($id);
+
+        // No language is set for this model, we will use the current user language
+        if (is_null($model->locale)) {
+
+            $model->locale = Yii::$app->language;
+            if (!Yii::$app->request->isPost) {
+
+                $languages = $model->getLanguagesList(false);
+                Yii::$app->getSession()->setFlash(
+                    'danger',
+                    Yii::t(
+                        'app/modules/blog',
+                        'No display language has been set for this blog category. When saving, the current user language will be selected: {language}',
+                        [
+                            'language' => (isset($languages[Yii::$app->language])) ? $languages[Yii::$app->language] : Yii::$app->language
+                        ]
+                    )
+                );
+            }
+        }
 
         // Get current URL before save this category
         $oldCategoryUrl = $model->getCategoryUrl(false);
@@ -303,16 +376,39 @@ class CatsController extends Controller
     /**
      * Finds the Category model based on its primary key value.
      * If the model is not found, a 404 HTTP exception will be thrown.
+     *
      * @param integer $id
      * @return category model item
      * @throws NotFoundHttpException if the model cannot be found
      */
     protected function findModel($id)
     {
-        if (($model = Categories::findOne($id)) !== null) {
+
+        if (is_null($this->_locale) && ($model = Categories::findOne($id)) !== null) {
             return $model;
+        } else {
+            if (($model = Categories::findOne(['source_id' => $id, 'locale' => $this->_locale])) !== null)
+                return $model;
         }
 
         throw new NotFoundHttpException(Yii::t('app/modules/blog', 'The requested category does not exist.'));
+    }
+
+    /**
+     * Return current locale for dashboard
+     *
+     * @return string|null
+     */
+    public function getLocale() {
+        return $this->_locale;
+    }
+
+    /**
+     * Return current Source ID for dashboard
+     *
+     * @return string|null
+     */
+    public function getSourceId() {
+        return $this->_source_id;
     }
 }

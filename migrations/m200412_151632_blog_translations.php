@@ -52,7 +52,7 @@ class m200412_151632_blog_translations extends Migration
         }
 
         if (is_null($this->getDb()->getSchema()->getTableSchema('{{%blog_cats}}')->getColumn('source_id'))) {
-            $this->addColumn('{{%blog_cats}}', 'source_id', $this->bigInteger()->null()->after('id'));
+            $this->addColumn('{{%blog_cats}}', 'source_id', $this->integer(11)->null()->after('id'));
 
             // Setup foreign key to source id
             $this->createIndex('{{%idx-blog-cats-source}}', '{{%blog_cats}}', ['source_id']);
@@ -87,7 +87,7 @@ class m200412_151632_blog_translations extends Migration
         }
 
         if (is_null($this->getDb()->getSchema()->getTableSchema('{{%blog_tags}}')->getColumn('source_id'))) {
-            $this->addColumn('{{%blog_tags}}', 'source_id', $this->bigInteger()->null()->after('id'));
+            $this->addColumn('{{%blog_tags}}', 'source_id', $this->integer(11)->null()->after('id'));
 
             // Setup foreign key to source id
             $this->createIndex('{{%idx-blog-tags-source}}', '{{%blog_tags}}', ['source_id']);

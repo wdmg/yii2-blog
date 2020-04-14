@@ -11,7 +11,7 @@ $this->title = Yii::t('app/modules/blog', 'Updating post: {name}', [
 ]);
 $this->params['breadcrumbs'][] = ['label' => Yii::t('app/modules/blog', 'All posts'), 'url' => ['posts/index']];
 $this->params['breadcrumbs'][] = ['label' => StringHelper::stringShorter($model->name, 64), 'url' => ['posts/view', 'id' => $model->id]];
-$this->params['breadcrumbs'][] = Yii::t('app/modules/blog', 'Edit');
+$this->params['breadcrumbs'][] = Yii::t('app/modules/blog', 'Updating');
 
 
 ?>
@@ -25,5 +25,6 @@ $this->params['breadcrumbs'][] = Yii::t('app/modules/blog', 'Edit');
         'categoriesList' => $model->getAllCategoriesList(false),
         'tagsList' => $model->getTagsList(),
         'statusModes' => $model->getStatusesList(),
+        'languagesList' => $model->getLanguagesList(false),
     ]); ?>
 </div>

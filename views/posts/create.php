@@ -18,6 +18,7 @@ $this->params['breadcrumbs'][] = $this->title;
         'model' => $model,
         'categoriesList' => $model->getAllCategoriesList(false),
         'tagsList' => $model->getTagsList(),
-        'statusModes' => $model->getStatusesList()
+        'statusModes' => $model->getStatusesList(),
+        'languagesList' => $model->getLanguagesList(false),
     ]); ?>
 </div>
