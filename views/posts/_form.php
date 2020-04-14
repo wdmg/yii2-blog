@@ -1,17 +1,36 @@
 <?php
 
-use wdmg\widgets\TagsInput;
 use yii\helpers\Html;
 use yii\helpers\Url;
 use yii\widgets\ActiveForm;
 use wdmg\widgets\Editor;
 use wdmg\widgets\SelectInput;
+use wdmg\widgets\TagsInput;
+use wdmg\widgets\LangSwitcher;
 
 /* @var $this yii\web\View */
 /* @var $model wdmg\blog\models\Posts */
 /* @var $form yii\widgets\ActiveForm */
 ?>
 <div class="blog-form row">
+    <div class="col-xs-12 col-sm-12">
+        <?php
+            echo LangSwitcher::widget([
+                'label' => Yii::t('app/modules/blog', 'Language version'),
+                'model' => $model,
+                'renderWidget' => 'button-group',
+                'createRoute' => 'posts/create',
+                'updateRoute' => 'posts/update',
+                'supportLocales' => $this->context->module->supportLocales,
+                'versions' => (isset($model->source_id)) ? $model->getAllVersions($model->source_id, true) : $model->getAllVersions($model->id, true),
+                'options' => [
+                    'id' => 'locale-switcher',
+                    'class' => 'pull-right'
+                ]
+            ]);
+        ?>
+    </div>
+
     <?php $form = ActiveForm::begin([
         'id' => "addPostForm",
         'enableAjaxValidation' => true,
@@ -23,8 +42,8 @@ use wdmg\widgets\SelectInput;
         <?= $form->field($model, 'name')->textInput(['maxlength' => true]) ?>
         <?php
             $output = '';
-            if (($postURL = $model->getPostUrl(true, true)) && $model->id) {
-                $output = Html::a($model->getPostUrl(true, false), $postURL, [
+            if (($postURL = $model->getUrl(true, true)) && $model->id) {
+                $output = Html::a($model->getUrl(true, false), $postURL, [
                     'target' => '_blank',
                     'data-pjax' => 0
                 ]);
@@ -42,25 +61,57 @@ use wdmg\widgets\SelectInput;
             ],
             'pluginOptions' => []
         ]) ?>
-
-        <?php
-            if ($model->image) {
-                echo '<div class="row">';
-                echo '<div class="col-xs-12 col-sm-3 col-md-2">' . Html::img($model->getImagePath(true) . '/' . $model->image, ['class' => 'img-responsive']) . '</div>';
-                echo '<div class="col-xs-12 col-sm-9 col-md-10">' . $form->field($model, 'file')->fileInput() . '</div>';
-                echo '</div><br/>';
-            } else {
-                echo $form->field($model, 'file')->fileInput();
-            }
-        ?>
-
-        <?= $form->field($model, 'title')->textInput() ?>
-        <?= $form->field($model, 'description')->textarea(['rows' => 3]) ?>
-        <?= $form->field($model, 'keywords')->textarea(['rows' => 3]) ?>
-        <hr/>
-        <div class="form-group">
-            <?= Html::a(Yii::t('app/modules/blog', '&larr; Back to list'), ['posts/index'], ['class' => 'btn btn-default pull-left']) ?>&nbsp;
-            <?= Html::submitButton(Yii::t('app/modules/blog', 'Save'), ['class' => 'btn btn-success pull-right']) ?>
+        <div class="panel panel-default">
+            <div class="panel-heading">
+                <h6 class="panel-title">
+                    <a data-toggle="collapse" href="#postMetaTags">
+                        <?= Yii::t('app/modules/blog', "SEO") ?>
+                    </a>
+                </h6>
+            </div>
+            <div id="postMetaTags" class="panel-collapse collapse">
+                <div class="panel-body">
+                    <?= $form->field($model, 'title')->textInput() ?>
+                    <?= $form->field($model, 'description')->textarea(['rows' => 3]) ?>
+                    <?= $form->field($model, 'keywords')->textarea(['rows' => 3]) ?>
+                </div>
+            </div>
+        </div>
+        <div class="panel panel-default">
+            <div class="panel-heading">
+                <h6 class="panel-title">
+                    <a data-toggle="collapse" href="#postOptions">
+                        <?= Yii::t('app/modules/blog', "Other options") ?>
+                    </a>
+                </h6>
+            </div>
+            <div id="postOptions" class="panel-collapse collapse">
+                <div class="panel-body">
+                    <?= $form->field($model, 'in_sitemap', [
+                        'template' => "{label}\n<br/>{input}\n{hint}\n{error}"
+                    ])->checkbox(['label' => Yii::t('app/modules/blog', '- display in the sitemap')])->label(Yii::t('app/modules/blog', 'Sitemap'))
+                    ?>
+                    <?= $form->field($model, 'in_rss', [
+                        'template' => "{label}\n<br/>{input}\n{hint}\n{error}"
+                    ])->checkbox(['label' => Yii::t('app/modules/blog', '- display in the rss-feed')])->label(Yii::t('app/modules/blog', 'RSS-feed'))
+                    ?>
+                    <?= $form->field($model, 'in_turbo', [
+                        'template' => "{label}\n<br/>{input}\n{hint}\n{error}"
+                    ])->checkbox(['label' => Yii::t('app/modules/blog', '- display in the turbo-pages')])->label(Yii::t('app/modules/blog', 'Yandex turbo'))
+                    ?>
+                    <?= $form->field($model, 'in_amp', [
+                        'template' => "{label}\n<br/>{input}\n{hint}\n{error}"
+                    ])->checkbox(['label' => Yii::t('app/modules/blog', '- display in the AMP pages')])->label(Yii::t('app/modules/blog', 'Google AMP'))
+                    ?>
+                </div>
+            </div>
+        </div>
+        <div class="hidden-xs hidden-sm">
+            <hr/>
+            <div class="form-group">
+                <?= Html::a(Yii::t('app/modules/blog', '&larr; Back to list'), ['posts/index'], ['class' => 'btn btn-default pull-left']) ?>&nbsp;
+                <?= Html::submitButton(Yii::t('app/modules/blog', 'Save'), ['class' => 'btn btn-success pull-right']) ?>
+            </div>
         </div>
     </div>
     <div class="col-xs-12 col-sm-12 col-md-4 col-lg-3">
@@ -87,22 +138,24 @@ use wdmg\widgets\SelectInput;
             ]
         ]); ?>
 
-        <?= $form->field($model, 'in_sitemap', [
-            'template' => "{label}\n<br/>{input}\n{hint}\n{error}"
-        ])->checkbox(['label' => Yii::t('app/modules/blog', '- display in the sitemap')])->label(Yii::t('app/modules/blog', 'Sitemap'))
+        <?php
+        if ($model->image) {
+            echo '<div class="row">';
+            echo '<div class="col-xs-12 col-sm-3 col-md-2">' . Html::img($model->getImagePath(true) . '/' . $model->image, ['class' => 'img-responsive']) . '</div>';
+            echo '<div class="col-xs-12 col-sm-9 col-md-10">' . $form->field($model, 'file')->fileInput() . '</div>';
+            echo '</div><br/>';
+        } else {
+            echo $form->field($model, 'file')->fileInput();
+        }
         ?>
-        <?= $form->field($model, 'in_rss', [
-            'template' => "{label}\n<br/>{input}\n{hint}\n{error}"
-        ])->checkbox(['label' => Yii::t('app/modules/blog', '- display in the rss-feed')])->label(Yii::t('app/modules/blog', 'RSS-feed'))
-        ?>
-        <?= $form->field($model, 'in_turbo', [
-            'template' => "{label}\n<br/>{input}\n{hint}\n{error}"
-        ])->checkbox(['label' => Yii::t('app/modules/blog', '- display in the turbo-pages')])->label(Yii::t('app/modules/blog', 'Yandex turbo'))
-        ?>
-        <?= $form->field($model, 'in_amp', [
-            'template' => "{label}\n<br/>{input}\n{hint}\n{error}"
-        ])->checkbox(['label' => Yii::t('app/modules/blog', '- display in the AMP pages')])->label(Yii::t('app/modules/blog', 'Google AMP'))
-        ?>
+
+        <?= $form->field($model, 'locale')->widget(SelectInput::class, [
+            'items' => $languagesList,
+            'options' => [
+                'id' => 'news-form-locale',
+                'class' => 'form-control'
+            ]
+        ])->label(Yii::t('app/modules/blog', 'Language')); ?>
 
         <?= $form->field($model, 'status')->widget(SelectInput::class, [
             'items' => $statusModes,
@@ -112,8 +165,12 @@ use wdmg\widgets\SelectInput;
             ]
         ]); ?>
         <hr/>
-        <div class="form-group">
+        <div class="form-group hidden-xs hidden-sm">
             <?= Html::submitButton(Yii::t('app/modules/blog', 'Save'), ['class' => 'btn btn-block btn-success pull-right']) ?>
+        </div>
+        <div class="form-group hidden-md hidden-lg">
+            <?= Html::a(Yii::t('app/modules/blog', '&larr; Back to list'), ['posts/index'], ['class' => 'btn btn-default pull-left']) ?>&nbsp;
+            <?= Html::submitButton(Yii::t('app/modules/blog', 'Save'), ['class' => 'btn btn-success pull-right']) ?>
         </div>
     </div>
     <?php ActiveForm::end(); ?>

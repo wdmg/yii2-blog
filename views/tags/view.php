@@ -11,6 +11,12 @@ $this->title = Yii::t('app/modules/blog', 'View tag');
 $this->params['breadcrumbs'][] = ['label' => Yii::t('app/modules/blog', 'Blog'), 'url' => ['posts/index']];
 $this->params['breadcrumbs'][] = ['label' => Yii::t('app/modules/blog', 'All tags'), 'url' => ['tags/index']];
 $this->params['breadcrumbs'][] = $this->title;
+
+$bundle = false;
+if ($model->locale && isset(Yii::$app->translations) && class_exists('\wdmg\translations\FlagsAsset')) {
+    $bundle = \wdmg\translations\FlagsAsset::register(Yii::$app->view);
+}
+
 ?>
 <div class="page-header">
     <h1><?= Html::encode($this->title) ?> <small class="text-muted pull-right">[v.<?= $this->context->module->version ?>]</small></h1>
@@ -38,7 +44,6 @@ $this->params['breadcrumbs'][] = $this->title;
             'title:ntext',
             'description:ntext',
             'keywords:ntext',
-
             [
                 'attribute' => 'posts',
                 'label' => Yii::t('app/modules/blog', 'Posts'),
@@ -49,6 +54,35 @@ $this->params['breadcrumbs'][] = $this->title;
                     } else {
                         return 0;
                     }
+                }
+            ],
+            [
+                'attribute' => 'locale',
+                'label' => Yii::t('app/modules/blog','Language'),
+                'format' => 'raw',
+                'value' => function($data) use ($bundle) {
+                    if ($data->locale) {
+                        if ($bundle) {
+                            $locale = Yii::$app->translations->parseLocale($data->locale, Yii::$app->language);
+                            if ($data->locale === $locale['locale']) { // Fixing default locale from PECL intl
+                                if (!($country = $locale['domain']))
+                                    $country = '_unknown';
+
+                                $flag = \yii\helpers\Html::img($bundle->baseUrl . '/flags-iso/flat/24/' . $country . '.png', [
+                                    'title' => $locale['name']
+                                ]);
+                                return $flag . " " . $locale['name'];
+                            }
+                        } else {
+                            if (extension_loaded('intl'))
+                                $language = mb_convert_case(trim(\Locale::getDisplayLanguage($data->locale, Yii::$app->language)), MB_CASE_TITLE, "UTF-8");
+                            else
+                                $language = $data->locale;
+
+                            return $language;
+                        }
+                    }
+                    return null;
                 }
             ],
             [
@@ -103,6 +137,13 @@ $this->params['breadcrumbs'][] = $this->title;
     <hr/>
     <div class="form-group">
         <?= Html::a(Yii::t('app/modules/blog', '&larr; Back to list'), ['tags/index'], ['class' => 'btn btn-default pull-left']) ?>&nbsp;
-        <?= Html::a(Yii::t('app/modules/blog', 'Update'), ['tags/update', 'id' => $model->id], ['class' => 'btn btn-primary pull-right']) ?>
+        <div class="form-group pull-right">
+            <?= Html::a(Yii::t('app/modules/blog', 'Delete'), ['tags/delete', 'id' => $model->id], [
+                'class' => 'btn btn-delete btn-danger',
+                'data-confirm' => Yii::t('app/modules/blog', 'Are you sure you want to delete this tag?'),
+                'data-method' => 'post',
+            ]) ?>
+            <?= Html::a(Yii::t('app/modules/blog', 'Update'), ['tags/update', 'id' => $model->id], ['class' => 'btn btn-edit btn-primary']) ?>
+        </div>
     </div>
 </div>

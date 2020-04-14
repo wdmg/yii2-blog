@@ -1,6 +1,11 @@
 Changelog
 =========
 
+## 1.2.0 (2020-04-14)
+ * Controllers, Models and Views
+ * Start of multi-language support
+ * Fixed migrations
+
 ## 1.1.4 (2020-03-31)
  * Refactoring log of activity
  * Log activity

@@ -10,6 +10,12 @@ use yii\widgets\DetailView;
 $this->title = Yii::t('app/modules/blog', 'View blog post');
 $this->params['breadcrumbs'][] = ['label' => Yii::t('app/modules/blog', 'All posts'), 'url' => ['posts/index']];
 $this->params['breadcrumbs'][] = $this->title;
+
+$bundle = false;
+if ($model->locale && isset(Yii::$app->translations) && class_exists('\wdmg\translations\FlagsAsset')) {
+    $bundle = \wdmg\translations\FlagsAsset::register(Yii::$app->view);
+}
+
 ?>
 <div class="page-header">
     <h1><?= Html::encode($this->title) ?> <small class="text-muted pull-right">[v.<?= $this->context->module->version ?>]</small></h1>
@@ -25,8 +31,8 @@ $this->params['breadcrumbs'][] = $this->title;
                 'format' => 'raw',
                 'value' => function($model) {
                     $output = Html::tag('strong', $model->name);
-                    if (($postURL = $model->getPostUrl(true, true)) && $model->id) {
-                        $output .= '<br/>' . Html::a($model->getPostUrl(true, false), $postURL, [
+                    if (($postURL = $model->getUrl(true, true)) && $model->id) {
+                        $output .= '<br/>' . Html::a($model->getUrl(true, false), $postURL, [
                             'target' => '_blank',
                             'data-pjax' => 0
                         ]);
@@ -129,12 +135,41 @@ $this->params['breadcrumbs'][] = $this->title;
             ],
 
             [
+                'attribute' => 'locale',
+                'label' => Yii::t('app/modules/blog','Language'),
+                'format' => 'raw',
+                'value' => function($data) use ($bundle) {
+                    if ($data->locale) {
+                        if ($bundle) {
+                            $locale = Yii::$app->translations->parseLocale($data->locale, Yii::$app->language);
+                            if ($data->locale === $locale['locale']) { // Fixing default locale from PECL intl
+                                if (!($country = $locale['domain']))
+                                    $country = '_unknown';
+
+                                $flag = \yii\helpers\Html::img($bundle->baseUrl . '/flags-iso/flat/24/' . $country . '.png', [
+                                    'title' => $locale['name']
+                                ]);
+                                return $flag . " " . $locale['name'];
+                            }
+                        } else {
+                            if (extension_loaded('intl'))
+                                $language = mb_convert_case(trim(\Locale::getDisplayLanguage($data->locale, Yii::$app->language)), MB_CASE_TITLE, "UTF-8");
+                            else
+                                $language = $data->locale;
+
+                            return $language;
+                        }
+                    }
+                    return null;
+                }
+            ],
+            [
                 'attribute' => 'status',
                 'format' => 'html',
                 'value' => function($data) {
-                    if ($data->status == $data::POST_STATUS_PUBLISHED)
+                    if ($data->status == $data::STATUS_PUBLISHED)
                         return '<span class="label label-success">'.Yii::t('app/modules/blog','Published').'</span>';
-                    elseif ($data->status == $data::POST_STATUS_DRAFT)
+                    elseif ($data->status == $data::STATUS_DRAFT)
                         return '<span class="label label-default">'.Yii::t('app/modules/blog','Draft').'</span>';
                     else
                         return $data->status;
@@ -192,7 +227,14 @@ $this->params['breadcrumbs'][] = $this->title;
     ]); ?>
     <hr/>
     <div class="form-group">
-        <?= Html::a(Yii::t('app/modules/blog', '&larr; Back to list'), ['posts/index'], ['class' => 'btn btn-default pull-left']) ?>&nbsp;
-        <?= Html::a(Yii::t('app/modules/blog', 'Update'), ['posts/update', 'id' => $model->id], ['class' => 'btn btn-primary pull-right']) ?>
+        <?= Html::a(Yii::t('app/modules/blog', '&larr; Back to list'), ['posts/index'], ['class' => 'btn btn-default pull-left']) ?>
+        <div class="form-group pull-right">
+            <?= Html::a(Yii::t('app/modules/blog', 'Delete'), ['posts/delete', 'id' => $model->id], [
+                'class' => 'btn btn-delete btn-danger',
+                'data-confirm' => Yii::t('app/modules/blog', 'Are you sure you want to delete this post?'),
+                'data-method' => 'post',
+            ]) ?>
+            <?= Html::a(Yii::t('app/modules/blog', 'Update'), ['posts/update', 'id' => $model->id], ['class' => 'btn btn-edit btn-primary']) ?>
+        </div>
     </div>
 </div>

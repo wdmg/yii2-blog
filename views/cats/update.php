@@ -12,7 +12,7 @@ $this->title = Yii::t('app/modules/blog', 'Updating category: {name}', [
 $this->params['breadcrumbs'][] = ['label' => Yii::t('app/modules/blog', 'Blog'), 'url' => ['posts/index']];
 $this->params['breadcrumbs'][] = ['label' => Yii::t('app/modules/blog', 'All categories'), 'url' => ['cats/index']];
 $this->params['breadcrumbs'][] = ['label' => StringHelper::stringShorter($model->name, 64), 'url' => ['cats/view', 'id' => $model->id]];
-$this->params['breadcrumbs'][] = Yii::t('app/modules/blog', 'Edit');
+$this->params['breadcrumbs'][] = Yii::t('app/modules/blog', 'Updating');
 
 
 ?>
@@ -23,6 +23,7 @@ $this->params['breadcrumbs'][] = Yii::t('app/modules/blog', 'Edit');
     <?= $this->render('_form', [
         'module' => $module,
         'model' => $model,
-        'parentsList' => $model->getParentsList(false, true)
+        'parentsList' => $model->getParentsList(false, true),
+        'languagesList' => $model->getLanguagesList(false),
     ]); ?>
 </div>

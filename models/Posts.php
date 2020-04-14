@@ -4,7 +4,8 @@ namespace wdmg\blog\models;
 
 use Yii;
 use yii\db\Expression;
-use yii\db\ActiveRecord;
+//use yii\db\ActiveRecord;
+use wdmg\base\models\ActiveRecordML;
 use yii\helpers\ArrayHelper;
 use yii\helpers\Json;
 use yii\base\InvalidArgumentException;
@@ -20,6 +21,7 @@ use wdmg\blog\models\Taxonomy;
  * This is the model class for table "{{%blog_posts}}".
  *
  * @property int $id
+ * @property int $source_id
  * @property string $name
  * @property string $alias
  * @property string $image_src
@@ -33,18 +35,18 @@ use wdmg\blog\models\Taxonomy;
  * @property boolean $in_turbo
  * @property boolean $in_amp
  * @property boolean $status
- * @property array $source
+ * @property string $locale
  * @property string $created_at
  * @property integer $created_by
  * @property string $updated_at
  * @property integer $updated_by
  */
-class Posts extends ActiveRecord
+class Posts extends ActiveRecordML
 {
     public $route;
 
-    const POST_STATUS_DRAFT = 0; // Blog post has draft
-    const POST_STATUS_PUBLISHED = 1; // Blog post has been published
+    const STATUS_DRAFT = 0; // Blog post has draft
+    const STATUS_PUBLISHED = 1; // Blog post has been published
     const TAXONOMY_CATEGORIES = 0; // Post taxnonomy by categories
     const TAXONOMY_TAGS = 1; // Post taxnonomy by tags
 
@@ -65,7 +67,7 @@ class Posts extends ActiveRecord
     /**
      * {@inheritdoc}
      */
-    public function behaviors()
+    /*public function behaviors()
     {
         return [
             'timestamp' => [
@@ -93,14 +95,14 @@ class Posts extends ActiveRecord
                 }
             ],
         ];
-    }
+    }*/
 
     /**
      * {@inheritdoc}
      */
     public function rules()
     {
-        $rules = [
+        return ArrayHelper::merge([
             [['name', 'alias', 'content'], 'required'],
             [['name', 'alias'], 'string', 'min' => 3, 'max' => 128],
             [['name', 'alias'], 'string', 'min' => 3, 'max' => 128],
@@ -111,14 +113,8 @@ class Posts extends ActiveRecord
             [['status', 'in_sitemap', 'in_rss', 'in_turbo', 'in_amp'], 'boolean'],
             ['alias', 'unique', 'message' => Yii::t('app/modules/blog', 'Param attribute must be unique.')],
             ['alias', 'match', 'pattern' => '/^[A-Za-z0-9\-\_]+$/', 'message' => Yii::t('app/modules/blog','It allowed only Latin alphabet, numbers and the «-», «_» characters.')],
-            [['source', 'created_at', 'updated_at'], 'safe'],
-        ];
-
-        if (class_exists('\wdmg\users\models\Users')) {
-            $rules[] = [['created_by', 'updated_by'], 'safe'];
-        }
-
-        return $rules;
+            [['created_at', 'updated_at'], 'safe'],
+        ], parent::rules());
     }
 
     /**
@@ -128,6 +124,7 @@ class Posts extends ActiveRecord
     {
         return [
             'id' => Yii::t('app/modules/blog', 'ID'),
+            'source_id' => Yii::t('app/modules/blog', 'Source ID'),
             'name' => Yii::t('app/modules/blog', 'Name'),
             'alias' => Yii::t('app/modules/blog', 'Alias'),
             'image' => Yii::t('app/modules/blog', 'Image'),
@@ -143,8 +140,8 @@ class Posts extends ActiveRecord
             'in_rss' => Yii::t('app/modules/blog', 'In RSS-feed?'),
             'in_turbo' => Yii::t('app/modules/blog', 'Yandex turbo-pages?'),
             'in_amp' => Yii::t('app/modules/blog', 'Google AMP?'),
+            'locale' => Yii::t('app/modules/blog', 'Locale'),
             'status' => Yii::t('app/modules/blog', 'Status'),
-            'source' => Yii::t('app/modules/blog', 'Source'),
             'created_at' => Yii::t('app/modules/blog', 'Created at'),
             'created_by' => Yii::t('app/modules/blog', 'Created by'),
             'updated_at' => Yii::t('app/modules/blog', 'Updated at'),
@@ -177,6 +174,9 @@ class Posts extends ActiveRecord
 
     }
 
+    /**
+     * @inheritdoc
+     */
     public function beforeValidate()
     {
         if (is_string($this->tags) && JsonValidator::isValid($this->tags)) {
@@ -197,8 +197,6 @@ class Posts extends ActiveRecord
      */
     public function beforeSave($insert)
     {
-        if (is_array($this->source))
-            $this->source = serialize($this->source);
 
         if (is_string($this->tags) && JsonValidator::isValid($this->tags)) {
             $this->tags = \yii\helpers\Json::decode($this->tags);
@@ -211,6 +209,9 @@ class Posts extends ActiveRecord
         return parent::beforeSave($insert);
     }
 
+    /**
+     * @inheritdoc
+     */
     public function afterSave($insert, $changedAttributes)
     {
 
@@ -235,43 +236,21 @@ class Posts extends ActiveRecord
     public function getImagePath($absoluteUrl = false)
     {
 
-        if (isset(Yii::$app->params["blog.blogImagePath"])) {
-            $blogImagePath = Yii::$app->params["blog.blogImagePath"];
+        if (isset(Yii::$app->params["blog.imagePath"])) {
+            $imagePath = Yii::$app->params["blog.imagePath"];
         } else {
 
             if (!$module = Yii::$app->getModule('admin/blog'))
                 $module = Yii::$app->getModule('blog');
 
-            $blogImagePath = $module->blogImagePath;
+            $imagePath = $module->imagePath;
         }
 
         if ($absoluteUrl)
-            return \yii\helpers\Url::to(str_replace('\\', '/', $blogImagePath), true);
+            return \yii\helpers\Url::to(str_replace('\\', '/', $imagePath), true);
         else
-            return $blogImagePath;
+            return $imagePath;
 
-    }
-
-    /**
-     * @return object of \yii\db\ActiveQuery
-     */
-    public function getCreatedBy()
-    {
-        if (class_exists('\wdmg\users\models\Users'))
-            return $this->hasOne(\wdmg\users\models\Users::class, ['id' => 'created_by']);
-        else
-            return $this->created_by;
-    }
-
-    /**
-     * @return object of \yii\db\ActiveQuery
-     */
-    public function getUpdatedBy()
-    {
-        if (class_exists('\wdmg\users\models\Users'))
-            return $this->hasOne(\wdmg\users\models\Users::class, ['id' => 'updated_by']);
-        else
-            return $this->updated_by;
     }
 
     public function upload($image = null)
@@ -289,48 +268,6 @@ class Posts extends ActiveRecord
             }
         }
         return false;
-    }
-
-    /**
-     * Returns published blog posts
-     *
-     * @param null $cond sampling conditions
-     * @param bool $asArray flag if necessary to return as an array
-     * @return array|ActiveRecord|null
-     */
-    public function getPublished($cond = null, $asArray = false) {
-        if (!is_null($cond) && is_array($cond))
-            $models = self::find()->where(ArrayHelper::merge($cond, ['status' => self::POST_STATUS_PUBLISHED]));
-        elseif (!is_null($cond) && is_string($cond))
-            $models = self::find()->where(ArrayHelper::merge([$cond], ['status' => self::POST_STATUS_PUBLISHED]));
-        else
-            $models = self::find()->where(['status' => self::POST_STATUS_PUBLISHED]);
-
-        if ($asArray)
-            return $models->asArray()->all();
-        else
-            return $models->all();
-
-    }
-
-    /**
-     * Returns all blog posts (draft and published)
-     *
-     * @param null $cond sampling conditions
-     * @param bool $asArray flag if necessary to return as an array
-     * @return array|ActiveRecord|null
-     */
-    public function getAll($cond = null, $asArray = false) {
-        if (!is_null($cond))
-            $models = self::find()->where($cond);
-        else
-            $models = self::find();
-
-        if ($asArray)
-            return $models->asArray()->all();
-        else
-            return $models->all();
-
     }
 
     /**
@@ -388,56 +325,6 @@ class Posts extends ActiveRecord
     }
 
     /**
-     * @return string
-     */
-    public function getRoute()
-    {
-        if (isset(Yii::$app->params["blog.blogRoute"])) {
-            $route = Yii::$app->params["blog.blogRoute"];
-        } else {
-
-            if (!$module = Yii::$app->getModule('admin/blog'))
-                $module = Yii::$app->getModule('blog');
-
-            $route = $module->blogRoute;
-        }
-
-        return $route;
-    }
-
-    /**
-     *
-     * @param $withScheme boolean, absolute or relative URL
-     * @return string or null
-     */
-    public function getPostUrl($withScheme = true, $realUrl = false)
-    {
-        $this->route = $this->getRoute();
-        if (isset($this->alias)) {
-            if ($this->status == self::POST_STATUS_DRAFT && $realUrl)
-                return \yii\helpers\Url::to(['default/view', 'alias' => $this->alias, 'draft' => 'true'], $withScheme);
-            else
-                return \yii\helpers\Url::to($this->route . '/' .$this->alias, $withScheme);
-
-        } else {
-            return null;
-        }
-    }
-
-    /**
-     * Returns the URL to the view of the current model
-     *
-     * @return string
-     */
-    public function getUrl()
-    {
-        if ($this->url === null)
-            $this->url = $this->getPostUrl();
-
-        return $this->url;
-    }
-
-    /**
      * @return array
      */
     public function getStatusesList($allStatuses = false)
@@ -445,13 +332,13 @@ class Posts extends ActiveRecord
         if ($allStatuses)
             return [
                 '*' => Yii::t('app/modules/blog', 'All statuses'),
-                self::POST_STATUS_DRAFT => Yii::t('app/modules/blog', 'Draft'),
-                self::POST_STATUS_PUBLISHED => Yii::t('app/modules/blog', 'Published'),
+                self::STATUS_DRAFT => Yii::t('app/modules/blog', 'Draft'),
+                self::STATUS_PUBLISHED => Yii::t('app/modules/blog', 'Published'),
             ];
         else
             return [
-                self::POST_STATUS_DRAFT => Yii::t('app/modules/blog', 'Draft'),
-                self::POST_STATUS_PUBLISHED => Yii::t('app/modules/blog', 'Published'),
+                self::STATUS_DRAFT => Yii::t('app/modules/blog', 'Draft'),
+                self::STATUS_PUBLISHED => Yii::t('app/modules/blog', 'Published'),
             ];
     }
 
@@ -696,5 +583,16 @@ class Posts extends ActiveRecord
         return $isOk;
     }
 
+
+    /**
+     * Returns the URL to the view of the current model
+     *
+     * @param $withScheme boolean, absolute or relative URL
+     * @return string or null
+     */
+    public function getPostUrl($withScheme = true, $realUrl = false)
+    {
+        return $this->getModelUrl($withScheme, $realUrl);
+    }
 
 }

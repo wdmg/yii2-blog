@@ -41,9 +41,9 @@ To add a module to the project, add the following data in your configuration fil
         'blog' => [
             'class' => 'wdmg\blog\Module',
             'routePrefix' => 'admin',
-            'blogRoute'  => '/blog', // route for frontend (string or array), use "/" - for root
-            'blogLayout' => '@app/views/layouts/main', // the default layout to render blog
-            'blogImagePath' => '/uploads/blog' // the default path to save blog thumbnails in @webroot
+            'baseRoute'  => '/blog', // route for frontend (string or array), use "/" - for root
+            'baseLayout' => '@app/views/layouts/main', // the default layout to render blog
+            'imagePath' => '/uploads/blog' // the default path to save blog thumbnails in @webroot
         ],
         ...
     ],
@@ -64,6 +64,7 @@ Use the `Module::dashboardNavItems()` method of the module to generate a navigat
     ?>
 
 # Status and version [ready to use]
+* v.1.2.0 - Multi-language support
 * v.1.1.4 - Log activity
 * v.1.1.3 - Added pagination
 * v.1.1.2 - Added default sort and fix breadcrumbs
