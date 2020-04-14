@@ -32,11 +32,15 @@ use yii\behaviors\SluggableBehavior;
 class Categories extends ActiveRecordML
 {
 
-    public $baseRoute;
     public $route;
+    public $baseRoute;
+
     public $url;
 
     const DEFAULT_CATEGORY_ID = 1;
+
+    public $moduleId = 'blog';
+    private $_module;
 
     /**
      * {@inheritdoc}
@@ -45,16 +49,13 @@ class Categories extends ActiveRecordML
     {
         parent::init();
 
-        if (isset(Yii::$app->params["blog.catsRoute"])) {
+        if (isset(Yii::$app->params["blog.catsRoute"]))
             $this->baseRoute = Yii::$app->params["blog.catsRoute"];
-        } else {
+        elseif (isset($this->_module->catsRoute))
+            $this->baseRoute = $this->_module->catsRoute;
 
-            if (!$module = Yii::$app->getModule('admin/blog'))
-                $module = Yii::$app->getModule('blog');
-
-            $this->baseRoute = $module->catsRoute;
-        }
     }
+
     /**
      * {@inheritdoc}
      */

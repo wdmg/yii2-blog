@@ -34,9 +34,13 @@ use yii\behaviors\SluggableBehavior;
 class Tags extends ActiveRecordML
 {
 
-    public $baseRoute;
     public $route;
+    public $baseRoute;
+
     public $url;
+
+    public $moduleId = 'blog';
+    private $_module;
 
     /**
      * {@inheritdoc}
@@ -45,15 +49,11 @@ class Tags extends ActiveRecordML
     {
         parent::init();
 
-        if (isset(Yii::$app->params["blog.tagsRoute"])) {
+        if (isset(Yii::$app->params["blog.tagsRoute"]))
             $this->baseRoute = Yii::$app->params["blog.tagsRoute"];
-        } else {
+        elseif (isset($this->_module->tagsRoute))
+            $this->baseRoute = $this->_module->tagsRoute;
 
-            if (!$module = Yii::$app->getModule('admin/blog'))
-                $module = Yii::$app->getModule('blog');
-
-            $this->baseRoute = $module->tagsRoute;
-        }
     }
 
     /**

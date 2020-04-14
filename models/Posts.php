@@ -44,6 +44,7 @@ use wdmg\blog\models\Taxonomy;
 class Posts extends ActiveRecordML
 {
     public $route;
+    public $baseRoute;
 
     const STATUS_DRAFT = 0; // Blog post has draft
     const STATUS_PUBLISHED = 1; // Blog post has been published
@@ -55,6 +56,23 @@ class Posts extends ActiveRecordML
 
     public $categories;
     public $tags;
+
+    public $moduleId = 'blog';
+    private $_module;
+
+    /**
+     * {@inheritdoc}
+     */
+    public function init()
+    {
+        parent::init();
+
+        if (isset(Yii::$app->params["blog.baseRoute"]))
+            $this->baseRoute = Yii::$app->params["blog.baseRoute"];
+        elseif (isset($this->_module->baseRoute))
+            $this->baseRoute = $this->_module->baseRoute;
+
+    }
 
     /**
      * {@inheritdoc}
@@ -383,7 +401,14 @@ class Posts extends ActiveRecordML
         if ($allCategories)
             $list['*'] = Yii::t('app/modules/blog', 'All categories');
 
-        if ($categories = $this->getAllCategories(null, ['id', 'name'], true)) {
+        $cond = null;
+        if (!is_null($this->locale)) {
+            $cond = [
+                'locale' => $this->locale
+            ];
+        }
+
+        if ($categories = $this->getAllCategories($cond, ['id', 'name'], true)) {
             $list = ArrayHelper::merge($list, ArrayHelper::map($categories, 'id', 'name'));
         }
 
@@ -396,7 +421,15 @@ class Posts extends ActiveRecordML
     public function getTagsList()
     {
         $list = [];
-        if ($tags = $this->getTags(null, true)) {
+
+        $cond = null;
+        if (!is_null($this->locale)) {
+            $cond = [
+                'locale' => $this->locale
+            ];
+        }
+
+        if ($tags = $this->getAllTags($cond, ['id', 'name'], true)) {
             $list = ArrayHelper::merge($list, ArrayHelper::map($tags, 'id', 'name'));
         }
 
