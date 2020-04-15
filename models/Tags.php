@@ -49,6 +49,7 @@ class Tags extends ActiveRecordML
     {
         parent::init();
 
+        $this->_module = self::getModule(true);
         if (isset(Yii::$app->params["blog.tagsRoute"]))
             $this->baseRoute = Yii::$app->params["blog.tagsRoute"];
         elseif (isset($this->_module->tagsRoute))

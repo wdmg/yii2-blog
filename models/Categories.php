@@ -49,6 +49,7 @@ class Categories extends ActiveRecordML
     {
         parent::init();
 
+        $this->_module = self::getModule(true);
         if (isset(Yii::$app->params["blog.catsRoute"]))
             $this->baseRoute = Yii::$app->params["blog.catsRoute"];
         elseif (isset($this->_module->catsRoute))

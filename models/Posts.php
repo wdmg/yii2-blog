@@ -67,6 +67,7 @@ class Posts extends ActiveRecordML
     {
         parent::init();
 
+        $this->_module = self::getModule(true);
         if (isset(Yii::$app->params["blog.baseRoute"]))
             $this->baseRoute = Yii::$app->params["blog.baseRoute"];
         elseif (isset($this->_module->baseRoute))

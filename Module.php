@@ -89,8 +89,10 @@ class Module extends BaseModule
         // Set priority of current module
         $this->setPriority($this->priority);
 
-        // Process and normalize route for blog in frontend
+        // Process and normalize routes for blog in frontend
         $this->baseRoute = self::normalizeRoute($this->baseRoute);
+        $this->catsRoute = self::normalizeRoute($this->catsRoute);
+        $this->tagsRoute = self::normalizeRoute($this->tagsRoute);
 
         // Normalize path to image folder
         $this->imagePath = \yii\helpers\FileHelper::normalizePath($this->imagePath);
@@ -134,39 +136,81 @@ class Module extends BaseModule
     {
         parent::bootstrap($app);
 
-        // Add routes to blog in frontend
-        $baseRoute = $this->baseRoute;
-        if (empty($baseRoute) || $baseRoute == "/") {
-            $app->getUrlManager()->addRules([
-                [
-                    'pattern' => '/<alias:[\w-]+>',
-                    'route' => 'admin/blog/default/view',
-                    'suffix' => ''
-                ],
-                '/<alias:[\w-]+>' => 'admin/blog/default/view',
-            ], true);
-        } else {
-            $app->getUrlManager()->addRules([
-                [
-                    'pattern' => $baseRoute,
-                    'route' => 'admin/blog/default/index',
-                    'suffix' => ''
-                ],
-                [
-                    'pattern' => $baseRoute . '/<alias:[\w-]+>',
-                    'route' => 'admin/blog/default/view',
-                    'suffix' => ''
-                ],
-                $baseRoute => 'admin/blog/default/index',
-                $baseRoute . '/<alias:[\w-]+>' => 'admin/blog/default/view',
-            ], true);
-        }
+        if (!$this->isBackend()) {
 
-        // Add routes to blog posts in frontend
-        /*$app->getUrlManager()->addRules([
-            '/<lang:\w+>/<module:blog>/<alias:[\w-]+>' => 'admin/blog/default/view',
-            '/<module:blog>/<alias:[\w-]+>' => 'admin/blog/default/view',
-        ], true);*/
+            // Get language scheme if available
+            $custom = false;
+            $hide = false;
+            $scheme = null;
+            if (isset(Yii::$app->translations)) {
+                $custom = true;
+                $hide = Yii::$app->translations->module->hideDefaultLang;
+                $scheme = Yii::$app->translations->module->languageScheme;
+            }
+
+            // Add routes for frontend
+            switch ($scheme) {
+                case "after":
+
+                    $app->getUrlManager()->addRules([
+                        $this->baseRoute . '/<alias:[\w-]+>/<lang:\w+>' => 'admin/blog/default/view',
+                        $this->baseRoute . '/<lang:\w+>' => 'admin/blog/default/index',
+                    ], true);
+
+                    if ($hide) {
+                        $app->getUrlManager()->addRules([
+                            $this->baseRoute . '/<alias:[\w-]+>' => 'admin/blog/default/view',
+                            $this->baseRoute => 'admin/blog/default/index',
+                        ], true);
+                    }
+
+                    break;
+
+                case "query":
+
+                    $app->getUrlManager()->addRules([
+                        $this->baseRoute . '/<alias:[\w-]+>' => 'admin/blog/default/view',
+                        $this->baseRoute => 'admin/blog/default/index',
+                    ], true);
+
+                    /*if ($hide) {
+
+                    }*/
+
+                    break;
+
+                case "subdomain":
+
+                    if ($host = $app->getRequest()->getHostName()) {
+                        $app->getUrlManager()->addRules([
+                            'http(s)?://' . $host. '/' . $this->baseRoute . '/<alias:[\w-]+>' => 'admin/pages/default/view',
+                            'http(s)?://' . $host. '/' . $this->baseRoute => 'admin/pages/default/index',
+                        ], true);
+
+                        /*if ($hide) {
+
+                        }*/
+                    }
+
+                    break;
+
+                default:
+
+                    $app->getUrlManager()->addRules([
+                        '/<lang:\w+>' . $this->baseRoute . '/<alias:[\w-]+>' => 'admin/blog/default/view',
+                        '/<lang:\w+>' . $this->baseRoute => 'admin/blog/default/index',
+                    ], true);
+
+                    if ($hide || !$custom) {
+                        $app->getUrlManager()->addRules([
+                            $this->baseRoute . '/<alias:[\w-]+>' => 'admin/blog/default/view',
+                            $this->baseRoute => 'admin/blog/default/index',
+                        ], true);
+                    }
+
+                    break;
+            }
+        }
     }
 
 
