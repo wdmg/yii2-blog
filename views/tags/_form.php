@@ -95,6 +95,7 @@ $(document).ready(function() {
             ).done(function(data) {
                 if (data.alias && form.find('#tags-alias').val().length == 0) {
                     form.find('#tags-alias').val(data.alias);
+                    form.find('#tags-alias').change();
                     form.yiiActiveForm('validateAttribute', 'tags-alias');
                 }
             }).fail(function () {

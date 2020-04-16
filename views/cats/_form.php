@@ -101,6 +101,7 @@ $(document).ready(function() {
             ).done(function(data) {
                 if (data.alias && form.find('#categories-alias').val().length == 0) {
                     form.find('#categories-alias').val(data.alias);
+                    form.find('#categories-alias').change();
                     form.yiiActiveForm('validateAttribute', 'categories-alias');
                 }
             }).fail(function () {

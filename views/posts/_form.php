@@ -188,6 +188,7 @@ $(document).ready(function() {
             ).done(function(data) {
                 if (data.alias && form.find('#posts-alias').val().length == 0) {
                     form.find('#posts-alias').val(data.alias);
+                    form.find('#posts-alias').change();
                     form.yiiActiveForm('validateAttribute', 'posts-alias');
                 }
             }).fail(function () {
