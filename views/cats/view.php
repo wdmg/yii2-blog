@@ -33,7 +33,7 @@ if ($model->locale && isset(Yii::$app->translations) && class_exists('\wdmg\tran
                 'value' => function($model) {
                     $output = Html::tag('strong', $model->name);
                     if (($categoryURL = $model->getCategoryUrl(true, true)) && $model->id) {
-                        $output .= '<br/>' . Html::a($model->getCategoryUrl(true, false), $categoryURL, [
+                        $output .= '<br/>' . Html::a($model->getUrl(true), $categoryURL, [
                             'target' => '_blank',
                             'data-pjax' => 0
                         ]);
