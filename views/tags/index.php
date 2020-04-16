@@ -42,7 +42,7 @@ if (isset(Yii::$app->translations) && class_exists('\wdmg\translations\FlagsAsse
                 'value' => function($model) {
                     $output = Html::tag('strong', $model->name);
                     if (($tagURL = $model->getTagUrl(true, true)) && $model->id) {
-                        $output .= '<br/>' . Html::a($model->getTagUrl(true, false), $tagURL, [
+                        $output .= '<br/>' . Html::a($model->getUrl(true, false), $tagURL, [
                                 'target' => '_blank',
                                 'data-pjax' => 0
                             ]);

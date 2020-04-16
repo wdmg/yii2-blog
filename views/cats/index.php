@@ -43,7 +43,7 @@ if (isset(Yii::$app->translations) && class_exists('\wdmg\translations\FlagsAsse
                     $output = Html::tag('strong', $model->name);
                     $output .= (($model->id === 1) ? " <span class=\"text-muted\">(" . Yii::t('app/modules/blog', 'default') . ")</span>" : "");
                     if (($categoryURL = $model->getCategoryUrl(true, true)) && $model->id) {
-                        $output .= '<br/>' . Html::a($model->getCategoryUrl(true, false), $categoryURL, [
+                        $output .= '<br/>' . Html::a($model->getUrl(true, false), $categoryURL, [
                                 'target' => '_blank',
                                 'data-pjax' => 0
                             ]);

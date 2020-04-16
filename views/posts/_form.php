@@ -7,6 +7,7 @@ use wdmg\widgets\Editor;
 use wdmg\widgets\SelectInput;
 use wdmg\widgets\TagsInput;
 use wdmg\widgets\LangSwitcher;
+use wdmg\widgets\AliasInput;
 
 /* @var $this yii\web\View */
 /* @var $model wdmg\blog\models\Posts */
@@ -40,20 +41,17 @@ use wdmg\widgets\LangSwitcher;
     ]); ?>
     <div class="col-xs-12 col-sm-12 col-md-8 col-lg-9">
         <?= $form->field($model, 'name')->textInput(['maxlength' => true]) ?>
-        <?php
-            $output = '';
-            if (($postURL = $model->getUrl(true, true)) && $model->id) {
-                $output = Html::a($model->getUrl(true, false), $postURL, [
-                    'target' => '_blank',
-                    'data-pjax' => 0
-                ]);
-            }
 
-            if (!empty($output))
-                echo Html::tag('label', Yii::t('app/modules/blog', 'Post URL')) . Html::tag('fieldset', $output) . '<br/>';
+        <?= $form->field($model, 'alias')->widget(AliasInput::class, [
+            'labels' => [
+                'edit' => Yii::t('app/modules/blog', 'Edit'),
+                'save' => Yii::t('app/modules/blog', 'Save')
+            ],
+            'options' => [
+                'baseUrl' => ($model->id) ? $model->url : Url::to($model->getRoute(), true)
+            ]
+        ])->label(Yii::t('app/modules/blog', 'Post URL')); ?>
 
-        ?>
-        <?= $form->field($model, 'alias')->textInput(['maxlength' => true]) ?>
         <?= $form->field($model, 'excerpt')->textarea(['rows' => 3]) ?>
         <?= $form->field($model, 'content')->widget(Editor::class, [
             'options' => [
@@ -110,7 +108,7 @@ use wdmg\widgets\LangSwitcher;
             <hr/>
             <div class="form-group">
                 <?= Html::a(Yii::t('app/modules/blog', '&larr; Back to list'), ['posts/index'], ['class' => 'btn btn-default pull-left']) ?>&nbsp;
-                <?= Html::submitButton(Yii::t('app/modules/blog', 'Save'), ['class' => 'btn btn-success pull-right']) ?>
+                <?= Html::submitButton(Yii::t('app/modules/blog', 'Save'), ['class' => 'btn btn-save btn-success pull-right']) ?>
             </div>
         </div>
     </div>
@@ -166,7 +164,7 @@ use wdmg\widgets\LangSwitcher;
         ]); ?>
         <hr/>
         <div class="form-group hidden-xs hidden-sm">
-            <?= Html::submitButton(Yii::t('app/modules/blog', 'Save'), ['class' => 'btn btn-block btn-success pull-right']) ?>
+            <?= Html::submitButton(Yii::t('app/modules/blog', 'Save'), ['class' => 'btn btn-save btn-block btn-success pull-right']) ?>
         </div>
         <div class="form-group hidden-md hidden-lg">
             <?= Html::a(Yii::t('app/modules/blog', '&larr; Back to list'), ['posts/index'], ['class' => 'btn btn-default pull-left']) ?>&nbsp;
@@ -188,7 +186,7 @@ $(document).ready(function() {
                     data: form.serializeArray(),
                 }
             ).done(function(data) {
-                if (data.alias && form.find('#blog-alias').val().length == 0) {
+                if (data.alias && form.find('#posts-alias').val().length == 0) {
                     form.find('#posts-alias').val(data.alias);
                     form.yiiActiveForm('validateAttribute', 'posts-alias');
                 }

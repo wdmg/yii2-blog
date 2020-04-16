@@ -5,6 +5,7 @@ use yii\helpers\Url;
 use yii\widgets\ActiveForm;
 use wdmg\widgets\SelectInput;
 use wdmg\widgets\LangSwitcher;
+use wdmg\widgets\AliasInput;
 
 /* @var $this yii\web\View */
 /* @var $model wdmg\blog\models\Categories */
@@ -35,20 +36,16 @@ use wdmg\widgets\LangSwitcher;
             ]
         ]); ?>
         <?= $form->field($model, 'name')->textInput(['maxlength' => true]) ?>
-        <?php
-            $output = '';
-            if (($categoryURL = $model->getCategoryUrl(true, true)) && $model->id) {
-                $output = Html::a($model->getCategoryUrl(true, false), $categoryURL, [
-                        'target' => '_blank',
-                        'data-pjax' => 0
-                    ]);
-            }
 
-            if (!empty($output))
-                echo Html::tag('label', Yii::t('app/modules/blog', 'Category URL')) . Html::tag('fieldset', $output) . '<br/>';
-
-        ?>
-        <?= $form->field($model, 'alias')->textInput(['maxlength' => true]) ?>
+        <?= $form->field($model, 'alias')->widget(AliasInput::class, [
+            'labels' => [
+                'edit' => Yii::t('app/modules/blog', 'Edit'),
+                'save' => Yii::t('app/modules/blog', 'Save')
+            ],
+            'options' => [
+                'baseUrl' => ($model->id) ? $model->url : Url::to($model->getRoute(), true)
+            ]
+        ])->label(Yii::t('app/modules/blog', 'Category URL')); ?>
 
         <div class="panel panel-default">
             <div class="panel-heading">
@@ -102,7 +99,7 @@ $(document).ready(function() {
                     data: form.serializeArray(),
                 }
             ).done(function(data) {
-                if (data.alias && form.find('#blog-alias').val().length == 0) {
+                if (data.alias && form.find('#categories-alias').val().length == 0) {
                     form.find('#categories-alias').val(data.alias);
                     form.yiiActiveForm('validateAttribute', 'categories-alias');
                 }

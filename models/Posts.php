@@ -580,6 +580,8 @@ class Posts extends ActiveRecordML
         foreach ($new_tags as $tag_name) {
             $tag = new Tags();
             $tag->name = $tag_name;
+            $tag->locale = (isset($this->locale)) ? $this->locale : null;
+
             if ($tag->save()) {
                 $new_tags_ids[] = intval($tag->id);
             } else {
