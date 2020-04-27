@@ -64,6 +64,7 @@ Use the `Module::dashboardNavItems()` method of the module to generate a navigat
     ?>
 
 # Status and version [ready to use]
+* v.1.2.2 - Fixed JsonValidator in dependencies
 * v.1.2.1 - Added AliasInput::widget()
 * v.1.2.0 - Multi-language support
 * v.1.1.4 - Log activity

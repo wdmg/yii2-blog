@@ -5,7 +5,6 @@ namespace wdmg\blog\models;
 use Yii;
 use yii\base\Model;
 use yii\data\ActiveDataProvider;
-use wdmg\validators\JsonValidator;
 use wdmg\blog\models\Posts;
 use wdmg\blog\models\Taxonomy;
 

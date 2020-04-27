@@ -6,7 +6,7 @@ namespace wdmg\blog;
  * Yii2 Blog
  *
  * @category        Module
- * @version         1.2.1
+ * @version         1.2.2
  * @author          Alexsander Vyshnyvetskyy <alex.vyshnyvetskyy@gmail.com>
  * @link            https://github.com/wdmg/yii2-blog
  * @copyright       Copyright (c) 2019 - 2020 W.D.M.Group, Ukraine

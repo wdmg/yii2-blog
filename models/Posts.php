@@ -4,14 +4,13 @@ namespace wdmg\blog\models;
 
 use Yii;
 use yii\db\Expression;
-//use yii\db\ActiveRecord;
-use wdmg\base\models\ActiveRecordML;
 use yii\helpers\ArrayHelper;
 use yii\helpers\Json;
 use yii\base\InvalidArgumentException;
 use yii\behaviors\TimestampBehavior;
 use yii\behaviors\BlameableBehavior;
 use yii\behaviors\SluggableBehavior;
+use wdmg\base\models\ActiveRecordML;
 use wdmg\validators\JsonValidator;
 use wdmg\blog\models\Categories;
 use wdmg\blog\models\Tags;
@@ -82,39 +81,6 @@ class Posts extends ActiveRecordML
     {
         return '{{%blog_posts}}';
     }
-
-    /**
-     * {@inheritdoc}
-     */
-    /*public function behaviors()
-    {
-        return [
-            'timestamp' => [
-                'class' => TimestampBehavior::class,
-                'attributes' => [
-                    ActiveRecord::EVENT_BEFORE_INSERT => 'created_at',
-                    ActiveRecord::EVENT_BEFORE_UPDATE => 'updated_at',
-                ],
-                'value' => new Expression('NOW()'),
-            ],
-            'blameable' => [
-                'class' => BlameableBehavior::class,
-                'createdByAttribute' => 'created_by',
-                'updatedByAttribute' => 'updated_by',
-            ],
-            'sluggable' =>  [
-                'class' => SluggableBehavior::class,
-                'attribute' => ['name'],
-                'slugAttribute' => 'alias',
-                'ensureUnique' => true,
-                'skipOnEmpty' => true,
-                'immutable' => true,
-                'value' => function ($event) {
-                    return mb_substr($this->name, 0, 32);
-                }
-            ],
-        ];
-    }*/
 
     /**
      * {@inheritdoc}
@@ -199,13 +165,13 @@ class Posts extends ActiveRecordML
     public function beforeValidate()
     {
         if (is_string($this->tags) && JsonValidator::isValid($this->tags)) {
-            $this->tags = \yii\helpers\Json::decode($this->tags);
+            $this->tags = Json::decode($this->tags);
         } elseif (is_array($this->tags)) {
-            $this->tags = \yii\helpers\Json::encode($this->tags);
+            $this->tags = Json::encode($this->tags);
         }
 
         if (is_array($this->tags)) {
-            $this->tags = \yii\helpers\Json::encode($this->tags);
+            $this->tags = Json::encode($this->tags);
         }
 
         return parent::beforeValidate();
@@ -218,7 +184,7 @@ class Posts extends ActiveRecordML
     {
 
         if (is_string($this->tags) && JsonValidator::isValid($this->tags)) {
-            $this->tags = \yii\helpers\Json::decode($this->tags);
+            $this->tags = Json::decode($this->tags);
         }
 
         // Set default category if category not be selected
@@ -552,7 +518,7 @@ class Posts extends ActiveRecordML
         $existing_tags_ids = ArrayHelper::getColumn($existing_tags, 'id', false);
 
         if (is_string($this->tags) && JsonValidator::isValid($this->tags))
-            $data = \yii\helpers\Json::decode($this->tags);
+            $data = Json::decode($this->tags);
         elseif (is_array($this->tags))
             $data = $this->tags;
 
