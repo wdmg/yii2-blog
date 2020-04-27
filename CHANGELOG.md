@@ -1,7 +1,8 @@
 Changelog
 =========
 
-## 1.2.*
+## 1.2.2 (2020-04-28)
+ * Fixed JsonValidator in dependencies
  * Set $app->sourceLanguage by default locale
 
 ## 1.2.1 (2020-04-16)

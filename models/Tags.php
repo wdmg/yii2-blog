@@ -2,10 +2,8 @@
 
 namespace wdmg\blog\models;
 
-use wdmg\validators\JsonValidator;
 use Yii;
 use yii\db\Expression;
-//use yii\db\ActiveRecord;
 use wdmg\base\models\ActiveRecordML;
 use yii\helpers\ArrayHelper;
 use yii\helpers\Json;
@@ -64,39 +62,6 @@ class Tags extends ActiveRecordML
     {
         return '{{%blog_tags}}';
     }
-
-    /**
-     * {@inheritdoc}
-     */
-    /*public function behaviors()
-    {
-        return [
-            'timestamp' => [
-                'class' => TimestampBehavior::class,
-                'attributes' => [
-                    ActiveRecord::EVENT_BEFORE_INSERT => 'created_at',
-                    ActiveRecord::EVENT_BEFORE_UPDATE => 'updated_at',
-                ],
-                'value' => new Expression('NOW()'),
-            ],
-            'blameable' => [
-                'class' => BlameableBehavior::class,
-                'createdByAttribute' => 'created_by',
-                'updatedByAttribute' => 'updated_by',
-            ],
-            'sluggable' =>  [
-                'class' => SluggableBehavior::class,
-                'attribute' => ['name'],
-                'slugAttribute' => 'alias',
-                'ensureUnique' => true,
-                'skipOnEmpty' => true,
-                'immutable' => true,
-                'value' => function ($event) {
-                    return mb_substr($this->name, 0, 32);
-                }
-            ],
-        ];
-    }*/
 
     /**
      * {@inheritdoc}
