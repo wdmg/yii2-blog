@@ -11,8 +11,9 @@ Publications manager for Yii2
 * PHP 5.6 or higher
 * Yii2 v.2.0.33 and newest
 * [Yii2 Base](https://github.com/wdmg/yii2-base) module (required)
-* [Yii2 Editor](https://github.com/wdmg/yii2-editor) module (required)
-* [Yii2 SelectInput](https://github.com/wdmg/yii2-selectinput) widget
+* [Yii2 Translations](https://github.com/wdmg/yii2-translations) module (optionaly)
+* [Yii2 Editor](https://github.com/wdmg/yii2-editor) widget
+* [Yii2 SelectInput](https://github.com/wdmg/yii2-selectinput)
 * [Yii2 TagsInput](https://github.com/wdmg/yii2-tagsinput) widget
 
 # Installation
