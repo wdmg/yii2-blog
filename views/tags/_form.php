@@ -48,6 +48,18 @@ use wdmg\widgets\AliasInput;
             ]
         ])->label(Yii::t('app/modules/blog', 'Tag URL')); ?>
 
+        <?php
+            if (isset(Yii::$app->redirects) && $model->url && ($model->status == $model::STATUS_PUBLISHED)) {
+                if ($url = Yii::$app->redirects->check($model->url, false)) {
+                    echo Html::tag('div', Yii::t('app/modules/redirects', 'For this URL is active redirect to {url}', [
+                        'url' => $url
+                    ]), [
+                        'class' => "alert alert-warning"
+                    ]);
+                }
+            }
+        ?>
+
         <div class="panel panel-default">
             <div class="panel-heading">
                 <h6 class="panel-title">

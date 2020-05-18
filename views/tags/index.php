@@ -11,7 +11,7 @@ use wdmg\widgets\SelectInput;
 /* @var $model wdmg\blog\models\Tags */
 
 $this->title = Yii::t('app/modules/blog', 'All tags');
-$this->params['breadcrumbs'][] = ['label' => Yii::t('app/modules/blog', 'Blog'), 'url' => ['posts/index']];
+$this->params['breadcrumbs'][] = ['label' => Yii::t('app/modules/blog', 'Blog'), 'url' => ['tags/index']];
 $this->params['breadcrumbs'][] = $this->title;
 
 if (isset(Yii::$app->translations) && class_exists('\wdmg\translations\FlagsAsset')) {
@@ -43,9 +43,24 @@ if (isset(Yii::$app->translations) && class_exists('\wdmg\translations\FlagsAsse
                     $output = Html::tag('strong', $model->name);
                     if (($tagURL = $model->getTagUrl(true, true)) && $model->id) {
                         $output .= '<br/>' . Html::a($model->getUrl(true), $tagURL, [
-                                'target' => '_blank',
-                                'data-pjax' => 0
+                            'target' => '_blank',
+                            'data-pjax' => 0
+                        ]);
+                    }
+
+                    if (isset(Yii::$app->redirects) && $model->url && ($model->status == $model::STATUS_PUBLISHED)) {
+                        if ($url = Yii::$app->redirects->check($model->url, false)) {
+                            $output .= '&nbsp' . Html::tag('span', '', [
+                                'class' => "text-danger fa fa-exclamation-circle",
+                                'data' => [
+                                    'toggle' => "tooltip",
+                                    'placement' => "top"
+                                ],
+                                'title' => Yii::t('app/modules/redirects', 'For this URL is active redirect to {url}', [
+                                    'url' => $url
+                                ])
                             ]);
+                        }
                     }
                     return $output;
                 }
@@ -108,7 +123,7 @@ if (isset(Yii::$app->translations) && class_exists('\wdmg\translations\FlagsAsse
                 'format' => 'html',
                 'value' => function($data) {
                     if ($posts = $data->posts) {
-                        return Html::a(count($posts), ['posts/index', 'tag_id' => $data->id]);
+                        return Html::a(count($posts), ['tags/index', 'tag_id' => $data->id]);
                     } else {
                         return 0;
                     }
@@ -150,7 +165,7 @@ if (isset(Yii::$app->translations) && class_exists('\wdmg\translations\FlagsAsse
                                 if ($data->locale === $locale['locale']) // It`s source version
                                     $output[] = Html::a($flag,
                                         [
-                                            'posts/update', 'id' => $data->id
+                                            'tags/update', 'id' => $data->id
                                         ], [
                                             'title' => Yii::t('app/modules/blog','Edit source version: {language}', [
                                                 'language' => $locale['name']
@@ -160,7 +175,7 @@ if (isset(Yii::$app->translations) && class_exists('\wdmg\translations\FlagsAsse
                                 else  // Other localization versions
                                     $output[] = Html::a($flag,
                                         [
-                                            'posts/update', 'id' => $data->id,
+                                            'tags/update', 'id' => $data->id,
                                             'locale' => $locale['locale']
                                         ], [
                                             'title' => Yii::t('app/modules/blog','Edit language version: {language}', [
@@ -185,7 +200,7 @@ if (isset(Yii::$app->translations) && class_exists('\wdmg\translations\FlagsAsse
                                 if ($data->locale === $locale) // It`s source version
                                     $output[] = Html::a($language,
                                         [
-                                            'news/update', 'id' => $data->id
+                                            'tags/update', 'id' => $data->id
                                         ], [
                                             'title' => Yii::t('app/modules/blog','Edit source version: {language}', [
                                                 'language' => $language
@@ -195,7 +210,7 @@ if (isset(Yii::$app->translations) && class_exists('\wdmg\translations\FlagsAsse
                                 else  // Other localization versions
                                     $output[] = Html::a($language,
                                         [
-                                            'news/update', 'id' => $data->id,
+                                            'tags/update', 'id' => $data->id,
                                             'locale' => $locale
                                         ], [
                                             'title' => Yii::t('app/modules/blog','Edit language version: {language}', [
@@ -225,7 +240,6 @@ if (isset(Yii::$app->translations) && class_exists('\wdmg\translations\FlagsAsse
                     return null;
                 }
             ],
-            
             [
                 'class' => 'yii\grid\ActionColumn',
                 'header' => Yii::t('app/modules/blog','Actions'),
