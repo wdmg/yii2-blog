@@ -199,7 +199,7 @@ if ($model->locale && isset(Yii::$app->translations) && class_exists('\wdmg\tran
 
                     $output = "";
                     if ($user = $data->createdBy) {
-                        $output = Html::a($user->username, ['../admin/users/view/?id='.$user->id], [
+                        $output = Html::a($user->username, ['users/view', 'id' => $user->id], [
                             'target' => '_blank',
                             'data-pjax' => 0
                         ]);
@@ -222,7 +222,7 @@ if ($model->locale && isset(Yii::$app->translations) && class_exists('\wdmg\tran
 
                     $output = "";
                     if ($user = $data->updatedBy) {
-                        $output = Html::a($user->username, ['../admin/users/view/?id='.$user->id], [
+                        $output = Html::a($user->username, ['users/view', 'id' => $user->id], [
                             'target' => '_blank',
                             'data-pjax' => 0
                         ]);
@@ -243,13 +243,18 @@ if ($model->locale && isset(Yii::$app->translations) && class_exists('\wdmg\tran
     <hr/>
     <div class="form-group">
         <?= Html::a(Yii::t('app/modules/blog', '&larr; Back to list'), ['posts/index'], ['class' => 'btn btn-default pull-left']) ?>
-        <div class="form-group pull-right">
-            <?= Html::a(Yii::t('app/modules/blog', 'Delete'), ['posts/delete', 'id' => $model->id], [
-                'class' => 'btn btn-delete btn-danger',
-                'data-confirm' => Yii::t('app/modules/blog', 'Are you sure you want to delete this post?'),
-                'data-method' => 'post',
-            ]) ?>
-            <?= Html::a(Yii::t('app/modules/blog', 'Update'), ['posts/update', 'id' => $model->id], ['class' => 'btn btn-edit btn-primary']) ?>
-        </div>
+        <?php if (Yii::$app->authManager && $this->context->module->moduleExist('rbac') && Yii::$app->user->can('updatePosts', [
+                'created_by' => $model->created_by,
+                'updated_by' => $model->updated_by
+            ])) : ?>
+            <div class="form-group pull-right">
+                <?= Html::a(Yii::t('app/modules/blog', 'Delete'), ['posts/delete', 'id' => $model->id], [
+                    'class' => 'btn btn-delete btn-danger',
+                    'data-confirm' => Yii::t('app/modules/blog', 'Are you sure you want to delete this post?'),
+                    'data-method' => 'post',
+                ]) ?>
+                <?= Html::a(Yii::t('app/modules/blog', 'Update'), ['posts/update', 'id' => $model->id], ['class' => 'btn btn-edit btn-primary']) ?>
+            </div>
+        <?php endif; ?>
     </div>
 </div>

@@ -6,7 +6,7 @@ namespace wdmg\blog;
  * Yii2 Blog
  *
  * @category        Module
- * @version         1.2.3
+ * @version         1.2.4
  * @author          Alexsander Vyshnyvetskyy <alex.vyshnyvetskyy@gmail.com>
  * @link            https://github.com/wdmg/yii2-blog
  * @copyright       Copyright (c) 2019 - 2020 W.D.M.Group, Ukraine
@@ -46,7 +46,7 @@ class Module extends BaseModule
     /**
      * @var string the module version
      */
-    private $version = "1.2.3";
+    private $version = "1.2.4";
 
     /**
      * @var integer, priority of initialization
@@ -181,10 +181,6 @@ class Module extends BaseModule
                         $this->baseRoute => $this->defaultController . '/index',
                     ], true);
 
-                    /*if ($hide) {
-
-                    }*/
-
                     break;
 
                 case "subdomain":
@@ -194,10 +190,6 @@ class Module extends BaseModule
                             'http(s)?://' . $host. '/' . $this->baseRoute . '/<alias:[\w-]+>' => $this->defaultController . '/view',
                             'http(s)?://' . $host. '/' . $this->baseRoute => $this->defaultController . '/index',
                         ], true);
-
-                        /*if ($hide) {
-
-                        }*/
                     }
 
                     break;

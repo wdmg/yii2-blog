@@ -88,7 +88,12 @@ use wdmg\widgets\AliasInput;
         <hr/>
         <div class="form-group">
             <?= Html::a(Yii::t('app/modules/blog', '&larr; Back to list'), ['tags/index'], ['class' => 'btn btn-default pull-left']) ?>&nbsp;
-            <?= Html::submitButton(Yii::t('app/modules/blog', 'Save'), ['class' => 'btn btn-success pull-right']) ?>
+            <?php if ((Yii::$app->authManager && $this->context->module->moduleExist('rbac') && Yii::$app->user->can('updatePosts', [
+                    'created_by' => $model->created_by,
+                    'updated_by' => $model->updated_by
+                ])) || !$model->id) : ?>
+                <?= Html::submitButton(Yii::t('app/modules/blog', 'Save'), ['class' => 'btn btn-success pull-right']) ?>
+            <?php endif; ?>
         </div>
         <?php ActiveForm::end(); ?>
     </div>

@@ -176,11 +176,21 @@ use wdmg\widgets\AliasInput;
         ]); ?>
         <hr/>
         <div class="form-group hidden-xs hidden-sm">
-            <?= Html::submitButton(Yii::t('app/modules/blog', 'Save'), ['class' => 'btn btn-save btn-block btn-success pull-right']) ?>
+            <?php if ((Yii::$app->authManager && $this->context->module->moduleExist('rbac') && Yii::$app->user->can('updatePosts', [
+                    'created_by' => $model->created_by,
+                    'updated_by' => $model->updated_by
+                ])) || !$model->id) : ?>
+                <?= Html::submitButton(Yii::t('app/modules/blog', 'Save'), ['class' => 'btn btn-save btn-block btn-success pull-right']) ?>
+            <?php endif; ?>
         </div>
         <div class="form-group hidden-md hidden-lg">
             <?= Html::a(Yii::t('app/modules/blog', '&larr; Back to list'), ['posts/index'], ['class' => 'btn btn-default pull-left']) ?>&nbsp;
-            <?= Html::submitButton(Yii::t('app/modules/blog', 'Save'), ['class' => 'btn btn-success pull-right']) ?>
+            <?php if ((Yii::$app->authManager && $this->context->module->moduleExist('rbac') && Yii::$app->user->can('updatePosts', [
+                    'created_by' => $model->created_by,
+                    'updated_by' => $model->updated_by
+                ])) || !$model->id) : ?>
+                <?= Html::submitButton(Yii::t('app/modules/blog', 'Save'), ['class' => 'btn btn-success pull-right']) ?>
+            <?php endif; ?>
         </div>
     </div>
     <?php ActiveForm::end(); ?>

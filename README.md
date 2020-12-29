@@ -73,6 +73,7 @@ Use the `Module::dashboardNavItems()` method of the module to generate a navigat
     ?>
 
 # Status and version [ready to use]
+* v.1.2.4 - RBAC implementation
 * v.1.2.3 - URL redirect notify, defaultController property, update dependencies and README.md
 * v.1.2.2 - Fixed JsonValidator in dependencies
 * v.1.2.1 - Added AliasInput::widget()
