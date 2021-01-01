@@ -69,7 +69,7 @@ class PostsController extends Controller
                 'class' => AccessControl::class,
                 'rules' => [
                     [
-                        'actions' => ['update', 'create'],
+                        'actions' => ['update', 'create', 'delete'],
                         'roles' => ['updatePosts'],
                         'allow' => true
                     ], [
