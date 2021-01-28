@@ -41,7 +41,8 @@
       "routePrefix": "admin",
       "baseRoute": "/blog",
       "baseLayout": "@app/views/layouts/main",
-      "imagePath": "/uploads/blog"
+      "imagePath": "/uploads/blog",
+      "supportLocales": ["ru-RU", "uk-UA", "en-US"]
     }
   }
 }
