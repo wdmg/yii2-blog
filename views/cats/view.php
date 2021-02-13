@@ -30,6 +30,9 @@ if ($model->locale && isset(Yii::$app->translations) && class_exists('\wdmg\tran
             [
                 'attribute' => 'name',
                 'format' => 'raw',
+                'contentOptions' => [
+                    'lang' => ($model->locale ?? Yii::$app->language)
+                ],
                 'value' => function($model) {
                     $output = Html::tag('strong', $model->name);
                     if (($categoryURL = $model->getCategoryUrl(true, true)) && $model->id) {
@@ -39,7 +42,7 @@ if ($model->locale && isset(Yii::$app->translations) && class_exists('\wdmg\tran
                         ]);
                     }
 
-                    if (isset(Yii::$app->redirects) && $model->url && ($model->status == $model::STATUS_PUBLISHED)) {
+                    if (isset(Yii::$app->redirects) && $model->url) {
                         if ($url = Yii::$app->redirects->check($model->url, false)) {
                             $output .= '&nbsp' . Html::tag('span', '', [
                                 'class' => "text-danger fa fa-exclamation-circle",
@@ -56,13 +59,34 @@ if ($model->locale && isset(Yii::$app->translations) && class_exists('\wdmg\tran
                     return $output;
                 }
             ],
-            'title:ntext',
-            'description:ntext',
-            'keywords:ntext',
+            [
+                'attribute' => 'title',
+                'format' => 'ntext',
+                'contentOptions' => [
+                    'lang' => ($model->locale ?? Yii::$app->language)
+                ]
+            ],
+            [
+                'attribute' => 'description',
+                'format' => 'ntext',
+                'contentOptions' => [
+                    'lang' => ($model->locale ?? Yii::$app->language)
+                ]
+            ],
+            [
+                'attribute' => 'keywords',
+                'format' => 'ntext',
+                'contentOptions' => [
+                    'lang' => ($model->locale ?? Yii::$app->language)
+                ]
+            ],
             [
                 'attribute' => 'posts',
                 'label' => Yii::t('app/modules/blog', 'Posts'),
                 'format' => 'html',
+                'contentOptions' => [
+                    'lang' => ($model->locale ?? Yii::$app->language)
+                ],
                 'value' => function($data) {
                     if ($posts = $data->posts) {
                         return Html::a(count($posts), ['posts/index', 'cat_id' => $data->id]);
