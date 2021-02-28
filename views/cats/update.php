@@ -19,7 +19,11 @@ $this->params['breadcrumbs'][] = Yii::t('app/modules/blog', 'Updating');
     'updated_by' => $model->updated_by
 ])) : ?>
     <div class="page-header">
-        <h1><?= Html::encode($this->title) ?><?= ($model->id === 1) ? " <span class=\"text-muted\">(" . Yii::t('app/modules/blog', 'default') . ")</span>" : ""?><small class="text-muted pull-right">[v.<?= $this->context->module->version ?>]</small></h1>
+        <h1>
+            <?= Html::encode($this->title) ?>
+            <?= ($model->is_default) ? " <span class=\"text-muted\">(" . Yii::t('app/modules/blog', 'default') . ")</span>" : "" ?>
+            <small class="text-muted pull-right">[v.<?= $this->context->module->version ?>]</small>
+        </h1>
     </div>
     <div class="blog-cats-update">
         <?= $this->render('_form', [

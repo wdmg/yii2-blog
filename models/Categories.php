@@ -23,6 +23,8 @@ use yii\behaviors\SluggableBehavior;
  * @property string $title
  * @property string $description
  * @property string $keywords
+ * @property string $locale
+ * @property integer $is_default
  * @property string $created_at
  * @property integer $created_by
  * @property string $updated_at
@@ -36,8 +38,6 @@ class Categories extends ActiveRecordML
     public $baseRoute;
 
     public $url;
-
-    const DEFAULT_CATEGORY_ID = 1;
 
     public $moduleId = 'blog';
     private $_module;
@@ -103,16 +103,19 @@ class Categories extends ActiveRecordML
      */
     public function rules()
     {
-        return ArrayHelper::merge([
+        $rules = parent::rules();
+        return ArrayHelper::merge($rules, [
             [['name', 'alias'], 'required'],
             [['parent_id'], 'integer'],
             [['name', 'alias'], 'string', 'min' => 3, 'max' => 128],
             [['name', 'alias'], 'string', 'min' => 3, 'max' => 128],
             [['title', 'description', 'keywords'], 'string', 'max' => 255],
-            ['alias', 'unique', 'message' => Yii::t('app/modules/blog', 'Param attribute must be unique.')],
-            ['alias', 'match', 'pattern' => '/^[A-Za-z0-9\-\_]+$/', 'message' => Yii::t('app/modules/blog','It allowed only Latin alphabet, numbers and the «-», «_» characters.')],
+            ['is_default', 'boolean'],
+            ['is_default', 'default', 'value' => false],
+            //['alias', 'unique', 'message' => Yii::t('app/modules/blog', 'Param attribute must be unique.')],
+            //['alias', 'match', 'pattern' => '/^[A-Za-z0-9\-\_]+$/', 'message' => Yii::t('app/modules/blog','It allowed only Latin alphabet, numbers and the «-», «_» characters.')],
             [['created_at', 'updated_at'], 'safe'],
-        ], parent::rules());
+        ]);
     }
 
     /**
@@ -123,6 +126,7 @@ class Categories extends ActiveRecordML
         return [
             'id' => Yii::t('app/modules/blog', 'ID'),
             'parent_id' => Yii::t('app/modules/blog', 'Parent ID'),
+            'source_id' => Yii::t('app/modules/blog', 'Source ID'),
             'name' => Yii::t('app/modules/blog', 'Name'),
             'alias' => Yii::t('app/modules/blog', 'Alias'),
             'title' => Yii::t('app/modules/blog', 'Title'),
@@ -150,12 +154,29 @@ class Categories extends ActiveRecordML
     public function beforeDelete()
     {
         // Category for uncategorized posts has undeleted
-        if ($data->id === self::DEFAULT_CATEGORY_ID)
+        if ($this->is_default && !$this->source_id)
             return false;
 
         return parent::beforeDelete();
     }
 
+    public function beforeValidate()
+    {
+        if (intval($this->source_id) == 0)
+            $this->source_id = null;
+        else
+            $this->source_id = intval($this->source_id);
+
+        if (intval($this->parent_id) == 0)
+            $this->parent_id = null;
+        else
+            $this->parent_id = intval($this->parent_id);
+
+        if ($this->is_default)
+            $this->is_default = intval($this->is_default);
+
+        return parent::beforeValidate();
+    }
 
     /**
      * Returns all blog categories

@@ -11,7 +11,11 @@ $this->params['breadcrumbs'][] = ['label' => Yii::t('app/modules/blog', 'All cat
 $this->params['breadcrumbs'][] = $this->title;
 ?>
 <div class="page-header">
-    <h1><?= Html::encode($this->title) ?><small class="text-muted pull-right">[v.<?= $this->context->module->version ?>]</small></h1>
+    <h1>
+        <?= Html::encode($this->title) ?><?= ($model->is_default) ? "
+        <span class=\"text-muted\">(" . Yii::t('app/modules/blog', 'default') . ")</span>" : "" ?>
+        <small class="text-muted pull-right">[v.<?= $this->context->module->version ?>]</small>
+    </h1>
 </div>
 <div class="blog-cats-create">
     <?= $this->render('_form', [

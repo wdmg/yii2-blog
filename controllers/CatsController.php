@@ -145,10 +145,14 @@ class CatsController extends Controller
 
         if (!is_null($this->_source_id)) {
             $model->source_id = $this->_source_id;
-            if ($source = $model::findOne(['id' => $this->_source_id])) {
-                if ($source->id) {
-                    $model->source_id = $source->id;
-                }
+            if ($source = $model::findOne(['id' => $model->source_id])) {
+
+                if ($source->id)
+                    $model->source_id = intval($source->id);
+
+                if ($source->is_default)
+                    $model->is_default = intval($source->is_default);
+
             }
         }
 
@@ -338,8 +342,16 @@ class CatsController extends Controller
         $model = $this->findModel($id);
 
         // Category for uncategorized posts has undeleted
-        if ($model->id === $model::DEFAULT_CATEGORY_ID)
+        if ($model->is_default && !$model->source_id) {
+            Yii::$app->getSession()->setFlash(
+                'warning',
+                Yii::t(
+                    'app/modules/blog',
+                    'The default category cannot be deleted.'
+                )
+            );
             return $this->redirect(['index']);
+        }
 
         if ($model->delete()) {
 

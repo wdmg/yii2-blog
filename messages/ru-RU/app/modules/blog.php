@@ -97,6 +97,7 @@ return [
     'An error occurred while deleting a blog post `{name}`.' => "Произошла ошбка при удалении публикации `{name}`.",
     'The requested blog post does not exist.' => "Запрошенная публикация не существует.",
 
+    'The default category cannot be deleted.' => "Категория по-умолчаниею не может быть удалена.",
     'default' => "по-умолчанию",
 
     'SEO' => 'SEO',

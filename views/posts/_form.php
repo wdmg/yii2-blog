@@ -14,7 +14,7 @@ use wdmg\widgets\AliasInput;
 /* @var $form yii\widgets\ActiveForm */
 ?>
 <div class="blog-form row">
-    <div class="col-xs-12 col-sm-12">
+    <div class="col-xs-12 col-sm-12" style="margin-bottom: 10px">
         <?php
             echo LangSwitcher::widget([
                 'label' => Yii::t('app/modules/blog', 'Language version'),

@@ -76,12 +76,14 @@ use wdmg\widgets\AliasInput;
             </div>
         </div>
 
-        <?= $form->field($model, 'parent_id')->widget(SelectInput::class, [
-            'items' => $parentsList,
-            'options' => [
-                'class' => 'form-control'
-            ]
-        ])->label(Yii::t('app/modules/blog', 'Parent category')); ?>
+        <?php if (!isset($model->source_id)) : ?>
+            <?= $form->field($model, 'parent_id')->widget(SelectInput::class, [
+                'items' => $parentsList,
+                'options' => [
+                    'class' => 'form-control'
+                ]
+            ])->label(Yii::t('app/modules/blog', 'Parent category')); ?>
+        <?php endif; ?>
 
         <?= $form->field($model, 'locale')->widget(SelectInput::class, [
             'items' => $languagesList,
