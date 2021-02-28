@@ -2,6 +2,7 @@ Changelog
 =========
 
 ## 1.2.*
+ * Multilangs and default category fixed
  * Lang attribute for HTML tags and inputs
  
 ## 1.2.4 (2020-12-29)
