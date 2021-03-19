@@ -316,4 +316,21 @@ class Categories extends ActiveRecordML
         }*/
         return $this->getModelUrl($withScheme, $realUrl);
     }
+
+
+    /**
+     * Removes the category taxonomy from the link to the post
+     *
+     * @return bool|false|int
+     * @throws \Throwable
+     * @throws \yii\db\StaleObjectException
+     */
+    public function delete()
+    {
+        $taxonomy = new Taxonomy();
+        if ($taxonomy->deleteAll(['taxonomy_id'=> $this->id, 'type' => Posts::TAXONOMY_CATEGORIES]))
+            return parent::delete();
+        else
+            return false;
+    }
 }

@@ -42,7 +42,7 @@ if ($model->locale && isset(Yii::$app->translations) && class_exists('\wdmg\tran
                         ]);
                     }
 
-                    if (isset(Yii::$app->redirects) && $model->url && ($model->status == $model::STATUS_PUBLISHED)) {
+                    if (isset(Yii::$app->redirects) && $model->url) {
                         if ($url = Yii::$app->redirects->check($model->url, false)) {
                             $output .= '&nbsp' . Html::tag('span', '', [
                                 'class' => "text-danger fa fa-exclamation-circle",

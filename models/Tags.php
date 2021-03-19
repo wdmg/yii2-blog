@@ -207,4 +207,20 @@ class Tags extends ActiveRecordML
             return $query->all();
 
     }
+
+    /**
+     * Removes the taxonomy of the tag from the link to the post
+     *
+     * @return bool|false|int
+     * @throws \Throwable
+     * @throws \yii\db\StaleObjectException
+     */
+    public function delete()
+    {
+        $taxonomy = new Taxonomy();
+        if ($taxonomy->deleteAll(['taxonomy_id'=> $this->id, 'type' => Posts::TAXONOMY_TAGS]))
+            return parent::delete();
+        else
+            return false;
+    }
 }

@@ -47,8 +47,8 @@ class Posts extends ActiveRecordML
 
     const STATUS_DRAFT = 0; // Blog post has draft
     const STATUS_PUBLISHED = 1; // Blog post has been published
-    const TAXONOMY_CATEGORIES = 0; // Post taxnonomy by categories
     const TAXONOMY_TAGS = 1; // Post taxnonomy by tags
+    const TAXONOMY_CATEGORIES = 2; // Post taxnonomy by categories
 
     public $file;
     public $url;

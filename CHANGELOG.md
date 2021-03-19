@@ -2,6 +2,7 @@ Changelog
 =========
 
 ## 1.2.*
+ * Delete tags/categories (clearing taxonomy)
  * Multilangs and default category fixed
  * Lang attribute for HTML tags and inputs
  

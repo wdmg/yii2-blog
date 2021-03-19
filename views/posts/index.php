@@ -26,7 +26,6 @@ if (isset(Yii::$app->translations) && class_exists('\wdmg\translations\FlagsAsse
     </h1>
 </div>
 <div class="blog-index">
-
     <?php Pjax::begin(); ?>
     <?= GridView::widget([
         'dataProvider' => $dataProvider,
