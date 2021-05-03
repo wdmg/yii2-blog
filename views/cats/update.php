@@ -30,7 +30,6 @@ $this->params['breadcrumbs'][] = Yii::t('app/modules/blog', 'Updating');
             'module' => $module,
             'model' => $model,
             'parentsList' => $model->getParentsList(false, true),
-            'languagesList' => $model->getLanguagesList(false),
         ]); ?>
     </div>
 <?php else: ?>

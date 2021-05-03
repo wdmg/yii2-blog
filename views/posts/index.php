@@ -215,7 +215,15 @@ if (isset(Yii::$app->translations) && class_exists('\wdmg\translations\FlagsAsse
                 'attribute' => 'locale',
                 'label' => Yii::t('app/modules/blog','Language versions'),
                 'format' => 'raw',
-                'filter' => false,
+                'filter' => SelectInput::widget([
+                    'model' => $searchModel,
+                    'attribute' => 'locale',
+                    'items' => $searchModel->getLanguagesList(true),
+                    'options' => [
+                        'id' => 'posts-list-locale',
+                        'class' => 'form-control'
+                    ]
+                ]),
                 'headerOptions' => [
                     'class' => 'text-center',
                     'style' => 'min-width:96px;'

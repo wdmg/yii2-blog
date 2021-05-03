@@ -85,14 +85,6 @@ use wdmg\widgets\AliasInput;
             ])->label(Yii::t('app/modules/blog', 'Parent category')); ?>
         <?php endif; ?>
 
-        <?= $form->field($model, 'locale')->widget(SelectInput::class, [
-            'items' => $languagesList,
-            'options' => [
-                'id' => 'news-form-locale',
-                'class' => 'form-control'
-            ]
-        ])->label(Yii::t('app/modules/blog', 'Language')); ?>
-
         <hr/>
         <div class="form-group">
             <?= Html::a(Yii::t('app/modules/blog', '&larr; Back to list'), ['cats/index'], ['class' => 'btn btn-default pull-left']) ?>&nbsp;

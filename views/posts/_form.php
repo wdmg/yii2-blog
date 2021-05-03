@@ -160,14 +160,6 @@ use wdmg\widgets\AliasInput;
         }
         ?>
 
-        <?= $form->field($model, 'locale')->widget(SelectInput::class, [
-            'items' => $languagesList,
-            'options' => [
-                'id' => 'news-form-locale',
-                'class' => 'form-control'
-            ]
-        ])->label(Yii::t('app/modules/blog', 'Language')); ?>
-
         <?= $form->field($model, 'status')->widget(SelectInput::class, [
             'items' => $statusModes,
             'options' => [

@@ -317,6 +317,34 @@ class Categories extends ActiveRecordML
         return $this->getModelUrl($withScheme, $realUrl);
     }
 
+    /**
+     * @param null $locale
+     * @return Categories|null
+     */
+    public static function getDefaultCategory($locale = null)
+    {
+        if ($locale)
+            return self::findOne(['is_default' => true, 'locale' => $locale]);
+        else
+            return self::findOne(['is_default' => true]);
+    }
+
+    /**
+     * @param null $id
+     * @param null $locale
+     * @return bool
+     */
+    public static function categoryExist($id = null, $locale = null)
+    {
+        if ($id) {
+            if ($locale)
+                return self::find()->where(['id' => $id, 'locale' => $locale])->exists();
+            else
+                return self::find()->where(['id' => $id])->exists();
+        }
+        return false;
+    }
+
 
     /**
      * Removes the category taxonomy from the link to the post

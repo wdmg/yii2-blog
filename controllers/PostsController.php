@@ -2,6 +2,8 @@
 
 namespace wdmg\blog\controllers;
 
+use wdmg\blog\models\Categories;
+use wdmg\blog\models\Taxonomy;
 use Yii;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
@@ -204,6 +206,11 @@ class PostsController extends Controller
             }
         }
 
+        // Set default category
+        if (is_null($model->categories)) {
+            $model->categories = Categories::getDefaultCategory($this->_locale);
+        }
+
         return $this->render('create', [
             'module' => $this->module,
             'model' => $model
@@ -326,6 +333,11 @@ class PostsController extends Controller
                 }
                 return $this->redirect(['index']);
             }
+        }
+
+        // Set default category
+        if (is_null($model->categories) || !Categories::categoryExist($model->categories, $this->_locale)) {
+            $model->categories = Categories::getDefaultCategory($this->_locale);
         }
 
         return $this->render('update', [

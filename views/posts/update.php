@@ -27,7 +27,6 @@ $this->params['breadcrumbs'][] = Yii::t('app/modules/blog', 'Updating');
             'categoriesList' => $model->getAllCategoriesList(false),
             'tagsList' => $model->getTagsList(),
             'statusModes' => $model->getStatusesList(),
-            'languagesList' => $model->getLanguagesList(false),
         ]); ?>
     </div>
 <?php else: ?>

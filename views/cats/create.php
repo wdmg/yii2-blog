@@ -22,6 +22,5 @@ $this->params['breadcrumbs'][] = $this->title;
         'module' => $module,
         'model' => $model,
         'parentsList' => $model->getParentsList(false, true),
-        'languagesList' => $model->getLanguagesList(false),
     ]); ?>
 </div>

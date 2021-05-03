@@ -20,7 +20,7 @@ class PostsSearch extends Posts
     {
         return [
             [['id', 'in_sitemap', 'in_rss', 'in_turbo', 'in_amp'], 'integer'],
-            [['name', 'categories', 'tags', 'alias', 'excerpt', 'title', 'description', 'keywords', 'status'], 'safe'],
+            [['name', 'locale', 'categories', 'tags', 'alias', 'excerpt', 'title', 'description', 'keywords', 'status'], 'safe'],
         ];
     }
 
@@ -93,6 +93,9 @@ class PostsSearch extends Posts
 
         if ($this->status !== "*")
             $query->andFilterWhere(['like', 'status', $this->status]);
+
+        if ($this->locale !== "*")
+            $query->andFilterWhere(['locale' => $this->locale]);
 
         if (intval($this->categories) !== 0) {
             $query->leftJoin(['taxonomy_cats' => Taxonomy::tableName()], '`taxonomy_cats`.`post_id` = `posts`.`id`');

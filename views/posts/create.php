@@ -5,7 +5,11 @@ use yii\helpers\Html;
 /* @var $this yii\web\View */
 /* @var $model wdmg\blog\models\Posts */
 
-$this->title = Yii::t('app/modules/blog', 'New post');
+if ($model->source_id)
+    $this->title = Yii::t('app/modules/blog', 'New post version');
+else
+    $this->title = Yii::t('app/modules/blog', 'New post');
+
 $this->params['breadcrumbs'][] = ['label' => Yii::t('app/modules/blog', 'All posts'), 'url' => ['posts/index']];
 $this->params['breadcrumbs'][] = $this->title;
 ?>
@@ -19,6 +23,5 @@ $this->params['breadcrumbs'][] = $this->title;
         'categoriesList' => $model->getAllCategoriesList(false),
         'tagsList' => $model->getTagsList(),
         'statusModes' => $model->getStatusesList(),
-        'languagesList' => $model->getLanguagesList(false),
     ]); ?>
 </div>
