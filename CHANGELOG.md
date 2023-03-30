@@ -1,7 +1,8 @@
 Changelog
 =========
 
-## 1.2.*
+## 1.3.0
+ * Update dependencies, copyrights
  * Languages list fixed
  * Deleting tags/categories (clearing taxonomy)
  * Multilangs and default category fixed

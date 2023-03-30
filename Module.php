@@ -6,10 +6,10 @@ namespace wdmg\blog;
  * Yii2 Blog
  *
  * @category        Module
- * @version         1.2.4
+ * @version         1.3.0
  * @author          Alexsander Vyshnyvetskyy <alex.vyshnyvetskyy@gmail.com>
  * @link            https://github.com/wdmg/yii2-blog
- * @copyright       Copyright (c) 2019 - 2021 W.D.M.Group, Ukraine
+ * @copyright       Copyright (c) 2019 - 2023 W.D.M.Group, Ukraine
  * @license         https://opensource.org/licenses/MIT Massachusetts Institute of Technology (MIT) License
  *
  */
@@ -46,7 +46,7 @@ class Module extends BaseModule
     /**
      * @var string the module version
      */
-    private $version = "1.2.4";
+    private $version = "1.3.0";
 
     /**
      * @var integer, priority of initialization
