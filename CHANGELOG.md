@@ -1,7 +1,10 @@
 Changelog
 =========
 
-## 1.3.0
+## 1.3.*
+ * Fix nav menu for dashboard
+
+## 1.3.0 (2023-05-30)
  * Update dependencies, copyrights
  * Languages list fixed
  * Deleting tags/categories (clearing taxonomy)
